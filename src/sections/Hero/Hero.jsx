@@ -11,7 +11,7 @@ import linkedinDark from '../../assets/linkedin-dark.svg';
 import themeIcon from "../../assets/sun.svg";
 import twitterIcon from "../../assets/twitter-light.svg";
 import githubIcon from "../../assets/github-light.svg";
-import linkedinIcon from "../../assets/Linkedin-light.svg";
+import linkedinIcon from "../../assets/linkedin-light.svg";
 import CV from "../../assets/cv.pdf";
 import { useTheme } from "../../common/ThemeContext";
 

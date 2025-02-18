@@ -1,90 +1,299 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  min-height: 100vh;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.profileSection {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.colorModeContainer {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: var(--profile-bg, white);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+.colorModeContainer:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.colorModeContainer:active {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+:global([data-theme="dark"]) .colorModeContainer {
+  background: var(--profile-bg-dark, #333);
+}
+
+:global([data-theme="light"]) .colorModeContainer {
+  background: var(--profile-bg-light, white);
+}
+
+.hero {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: filter 0.3s ease;
+}
+
+.colorMode {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--btn-color);
+  border: 3px solid white;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 2;
+}
+
+.colorMode:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.colorMode img {
+  width: 22px;
+  height: 22px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 600px;
+  text-align: center;
+}
+
+.nameTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.name {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+  color: var(--text-color);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+  opacity: 0.9;
+  color: var(--text-color);
+}
+
+.description {
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 36ch;
+  margin: 0;
+  color: var(--text-color);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: center;
+  width: 100%;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.socialLinks a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.socialLinks a:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.socialLinks img {
+  width: 20px;
+  height: 20px;
+}
+
+.resumeLink {
+  text-decoration: none;
+}
+
+.resumeButton {
+  min-width: 140px;
+  height: 48px;
+  padding: 0 1.5rem;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: var(--btn-color);
+  color: var(--btn-text-color);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(9, 135, 242, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.resumeButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(9, 135, 242, 0.3);
+}
+
+.resumeButton:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 8px rgba(9, 135, 242, 0.2);
+}
+
+/* Tablet breakpoint */
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 2rem;
+  }
+
+  .profileSection {
+    flex: 0 0 40%;
+    justify-content: flex-start;
+  }
+
+  .colorModeContainer {
+    width: 250px;
+    height: 250px;
+  }
+
+  .info {
+    flex: 0 0 55%;
+    align-items: center;
     text-align: center;
-    height: 100dvh;
-    min-height: 500px;
-    padding: 0 20px; /* Added padding */
+  }
+
+  .nameTitle {
     align-items: center;
   }
-  
-  .colorModeContainer {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    background-color: white;
-    padding: 15px;
-    border-radius: 50%; /* Changed to 50% to make it a perfect circle */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 200px; /* Added fixed width */
-    height: 200px; /* Added fixed height to match width */
+
+  .name {
+    font-size: 3rem;
   }
-  
-  
-  .hero {
-    width: 100%; /* Changed from max-width to width */
-    height: 100%; /* Added height to fill container */
-    border-radius: 50%; /* Made image circular as well */
-    object-fit: cover; /* Ensures image fills circle without distortion */
+
+  .title {
+    font-size: 1.5rem;
   }
-  
-  .colorMode {
-    position: absolute;
-    right: -30px; /* Adjust this value as needed */
-    top: 0;
-    width: 25px;
-    cursor: pointer;
-  }
-  
+
   .description {
-    max-width: 24ch;
-    margin: 0 auto; /* Center the text */
+    font-size: 1.125rem;
+    text-align: center;
   }
-  
-  .info {
-    display: flex;
+
+  .actions {
     flex-direction: column;
-    gap: 20px;
-    align-items: center; /* Center all content */
+    align-items: center;
   }
 
-  @media (width >= 800px) {
-    .colorModeContainer {
-        flex: 0 1 auto;
-        width: 250px; /* Larger size for desktop */
-        height: 250px; /* Keep height equal to width */
-      }
+  .socialLinks {
+    order: 0;
+  }
+}
 
-    .container {
-        flex-direction: row-reverse;
-        align-items: center;
-        justify-content: space-evenly;
-
-        .hero {
-            max-width: 350px;
-            width: 350px;
-        }
-    }
-
+/* Desktop breakpoint */
+@media (min-width: 1200px) {
+  .container {
+    padding: 3rem;
+    gap: 5rem;
   }
 
-  @media (width >= 1400) {
-    .colorModeContainer {
-        width: 300px; /* Even larger for very wide screens */
-        height: 300px;
-      }
-
-    .container {
-        flex-direction: row-reverse;
-        align-items: center;
-        justify-content: space-evenly;
-
-        .hero {
-            max-width: 400px;
-            width: 400px;
-        }
-    }
-
+  .colorModeContainer {
+    width: 300px;
+    height: 300px;
   }
+
+  .colorMode {
+    width: 60px;
+    height: 60px;
+    bottom: -15px;
+    right: -15px;
+  }
+
+  .colorMode img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .name {
+    font-size: 3.5rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .description {
+    font-size: 1.25rem;
+    max-width: 42ch;
+  }
+
+  .socialLinks a {
+    width: 50px;
+    height: 50px;
+  }
+
+  .socialLinks img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .resumeButton {
+    min-width: 160px;
+    height: 54px;
+    font-size: 1.125rem;
+  }
+}

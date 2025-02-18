@@ -1,10 +1,11 @@
 import "./App.css";
+import { ThemeProvider } from "./common/ThemeContext";
 import Hero from "./sections/Hero/Hero";
 import Portfolio from "./sections/Portfolio/Portfolio";
-import Skills from "./sections/Skills/Skills";
 
 function App() {
-    return (
+  return (
+    <ThemeProvider>
       <div className="parallax-wrapper">
         <div className="parallax-bg">
           <div className="background"></div>
@@ -15,7 +16,8 @@ function App() {
           <Portfolio />
         </div>
       </div>
-    );
-  }
+    </ThemeProvider>
+  );
+}
 
 export default App;

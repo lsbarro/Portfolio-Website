@@ -3,65 +3,63 @@ import heroImg from "../../assets/hero-img.png";
 import sun from '../../assets/sun.svg';
 import moon from '../../assets/moon.svg';
 import twitterLight from '../../assets/twitter-light.svg';
-import twitterDark from '../../assets/twitter-dark.svg'
+import twitterDark from '../../assets/twitter-dark.svg';
 import githubLight from '../../assets/github-light.svg';
 import githubDark from '../../assets/github-dark.svg';
 import linkedinLight from '../../assets/linkedin-light.svg';
 import linkedinDark from '../../assets/linkedin-dark.svg';
-import themeIcon from "../../assets/sun.svg";
-import twitterIcon from "../../assets/twitter-light.svg";
-import githubIcon from "../../assets/github-light.svg";
-import linkedinIcon from "../../assets/linkedin-light.svg";
 import CV from "../../assets/cv.pdf";
 import { useTheme } from "../../common/ThemeContext";
 
 function Hero() {
-
   const { theme, toggleTheme } = useTheme();
-
-  const themeIcon = theme ==='light' ? sun : moon;
-  const twitterIcon = theme ==='light' ? twitterLight : twitterDark;
-  const githubIcon = theme ==='light' ? githubLight : githubDark;
-  const linkedinIcon = theme ==='light' ? linkedinLight : linkedinDark;
+  const themeIcon = theme === 'light' ? sun : moon;
+  const twitterIcon = theme === 'light' ? twitterLight : twitterDark;
+  const githubIcon = theme === 'light' ? githubLight : githubDark;
+  const linkedinIcon = theme === 'light' ? linkedinLight : linkedinDark;
 
   return (
-    <section id="hero" className={styles.container}>
-      <div className={styles.colorModeContainer}>
-        <img
-          className={styles.hero}
-          src={heroImg}
-          alt="Profile picture of Liam Sbarro"
-        />
-
-        <img
-          className={styles.colorMode}
-          src={themeIcon}
-          alt="Color mode icon"
-          onClick={toggleTheme}
-        ></img>
+    <section className={styles.container}>
+      <div className={styles.profileSection}>
+        <div className={styles.colorModeContainer}>
+          <img src={heroImg} alt="Liam Sbarro" className={styles.hero} />
+          <button 
+            onClick={toggleTheme} 
+            className={styles.colorMode}
+            aria-label="Toggle dark mode"
+          >
+            <img src={themeIcon} alt="Theme toggle" />
+          </button>
+        </div>
       </div>
+
       <div className={styles.info}>
-        <h1>
-          Liam
-          <br />
-          Sbarro
-        </h1>
-        <h2>Software Developer</h2>
-        <span>
-          <a href="https://twitter.com/" target="_blank">
-            <img src={twitterIcon} alt="Twitter icon" />
+        <div className={styles.nameTitle}>
+          <h1 className={styles.name}>Liam Sbarro</h1>
+          <h2 className={styles.title}>Software Developer</h2>
+        </div>
+        
+        <p className={styles.description}>
+          I'm a passionate software developer focused on creating intuitive and responsive web applications. With expertise in modern JavaScript frameworks and a keen eye for design, I build solutions that deliver exceptional user experiences.
+        </p>
+        
+        <div className={styles.actions}>
+          <div className={styles.socialLinks}>
+            <a href="https://twitter.com/liamsbarro" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <img src={twitterIcon} alt="Twitter" />
+            </a>
+            <a href="https://github.com/liamsbarro" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <img src={githubIcon} alt="GitHub" />
+            </a>
+            <a href="https://linkedin.com/in/liamsbarro" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <img src={linkedinIcon} alt="LinkedIn" />
+            </a>
+          </div>
+          
+          <a href={CV} download className={styles.resumeLink}>
+            <button className={styles.resumeButton}>Resume</button>
           </a>
-          <a href="https://github.com/" target="_blank">
-            <img src={githubIcon} alt="Github icon" />
-          </a>
-          <a href="https://linkedin.com/" target="_blank">
-            <img src={linkedinIcon} alt="Linkedin icon" />
-          </a>
-        </span>
-        <p className={styles.description}> fill in with intro paragraph.</p>
-        <a href={CV} download>
-          <button className="hover">Resume</button>
-        </a>
+        </div>
       </div>
     </section>
   );

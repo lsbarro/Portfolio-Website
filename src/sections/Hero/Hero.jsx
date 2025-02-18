@@ -21,16 +21,13 @@ function Hero() {
   return (
     <section className={styles.container}>
       <div className={styles.profileSection}>
-        <div className={styles.colorModeContainer}>
+        <button 
+          onClick={toggleTheme}
+          className={styles.colorModeContainer}
+          aria-label="Toggle dark mode"
+        >
           <img src={heroImg} alt="Liam Sbarro" className={styles.hero} />
-          <button 
-            onClick={toggleTheme} 
-            className={styles.colorMode}
-            aria-label="Toggle dark mode"
-          >
-            <img src={themeIcon} alt="Theme toggle" />
-          </button>
-        </div>
+        </button>
       </div>
 
       <div className={styles.info}>

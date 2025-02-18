@@ -1,0 +1,90 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    text-align: center;
+    height: 100dvh;
+    min-height: 500px;
+    padding: 0 20px; /* Added padding */
+    align-items: center;
+  }
+  
+  .colorModeContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    padding: 15px;
+    border-radius: 50%; /* Changed to 50% to make it a perfect circle */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px; /* Added fixed width */
+    height: 200px; /* Added fixed height to match width */
+  }
+  
+  
+  .hero {
+    width: 100%; /* Changed from max-width to width */
+    height: 100%; /* Added height to fill container */
+    border-radius: 50%; /* Made image circular as well */
+    object-fit: cover; /* Ensures image fills circle without distortion */
+  }
+  
+  .colorMode {
+    position: absolute;
+    right: -30px; /* Adjust this value as needed */
+    top: 0;
+    width: 25px;
+    cursor: pointer;
+  }
+  
+  .description {
+    max-width: 24ch;
+    margin: 0 auto; /* Center the text */
+  }
+  
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center; /* Center all content */
+  }
+
+  @media (width >= 800px) {
+    .colorModeContainer {
+        flex: 0 1 auto;
+        width: 250px; /* Larger size for desktop */
+        height: 250px; /* Keep height equal to width */
+      }
+
+    .container {
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-evenly;
+
+        .hero {
+            max-width: 350px;
+            width: 350px;
+        }
+    }
+
+  }
+
+  @media (width >= 1400) {
+    .colorModeContainer {
+        width: 300px; /* Even larger for very wide screens */
+        height: 300px;
+      }
+
+    .container {
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-evenly;
+
+        .hero {
+            max-width: 400px;
+            width: 400px;
+        }
+    }
+
+  }

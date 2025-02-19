@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./PhotographyPortfolioStyles.module.css";
 import { useTheme } from "../../common/ThemeContext";
 // Import your photos
-import adaptiveSports1 from "./PhotoAssets/adaptiveSports1.jpeg";
+import adaptiveSports1 from "./PhotoAssets/AdaptiveSports1.jpeg";
 import AdaptiveSports3 from "./PhotoAssets/AdaptiveSports3.jpeg";
 import AdaptiveSports2 from "./PhotoAssets/AdaptiveSports2.jpeg";
 import AdaptiveSports4 from "./PhotoAssets/AdaptiveSports4.jpeg";

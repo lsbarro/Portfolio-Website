@@ -1,0 +1,329 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem 4rem 1rem; /* Reduced top padding */
+    box-sizing: border-box;
+    min-height: 100vh;
+  }
+  
+  .header {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-top: 2rem; /* Add specific top padding here */
+  }
+  
+  .backButton {
+    position: absolute;
+    left: 0;
+    top: 2rem; /* Align with header padding */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    padding: 10px 16px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .backButton svg {
+    transition: transform 0.3s ease;
+  }
+  
+  .backButton:hover {
+    background-color: var(--btn-color);
+    color: var(--btn-text-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(9, 135, 242, 0.2);
+  }
+  
+  .backButton:hover svg {
+    transform: translateX(-3px);
+  }
+  
+  .backButton:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(9, 135, 242, 0.15);
+  }
+  
+  .sectionTitle {
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    color: var(--text-color);
+    text-align: center;
+    margin-top: 1rem; /* Reduced top margin */
+  }
+  
+  .sectionTitle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -12px;
+    width: 60px;
+    height: 3px;
+    background-color: var(--btn-color);
+    transform: translateX(-50%);
+  }
+  
+  .galleryContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 2rem auto 0;
+  }
+  
+  .photoItem {
+    aspect-ratio: 4/3;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .photoItem:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+    display: block;
+  }
+  
+  .photoItem:hover .image {
+    transform: scale(1.05);
+  }
+  
+  /* Modal styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .modalContent {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: scaleIn 0.3s ease;
+  }
+  
+  @keyframes scaleIn {
+    from { transform: scale(0.95); }
+    to { transform: scale(1); }
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: -40px;
+    right: -10px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+    z-index: 1001;
+  }
+  
+  .closeButton:hover {
+    background: var(--btn-color);
+    transform: scale(1.1);
+  }
+  
+  .enlargedImageContainer {
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
+    max-height: 85vh;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .enlargedImage {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+  }
+  
+  .photoTitle {
+    color: white;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  /* Navigation controls */
+  .navigationControls {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  .navButton {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    pointer-events: auto;
+  }
+  
+  .navButton:hover:not(:disabled) {
+    background: rgba(9, 135, 242, 0.8);
+    transform: scale(1.1);
+  }
+  
+  .navButton:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .navButton svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .galleryContainer {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    
+    .backButton {
+      position: relative;
+      align-self: flex-start;
+      margin-bottom: 24px;
+      top: 0;
+    }
+    
+    .sectionTitle {
+      margin-top: 0;
+      font-size: 1.75rem;
+    }
+    
+    .header {
+      margin-bottom: 1.5rem;
+      padding-top: 1rem;
+    }
+    
+    .container {
+      padding: 1rem 1rem 3rem 1rem;
+    }
+    
+    .closeButton {
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .navigationControls {
+      padding: 0 5px;
+    }
+    
+    .navButton {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  
+  @media (min-width: 600px) and (max-width: 900px) {
+    .galleryContainer {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .container {
+      padding: 1.5rem 1rem 4rem 1rem;
+    }
+  }
+  
+  @media (min-width: 900px) and (max-width: 1200px) {
+    .galleryContainer {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    
+    .sectionTitle {
+      font-size: 2.25rem;
+    }
+    
+    .container {
+      padding: 2rem 1.5rem 5rem 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .galleryContainer {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 26px;
+    }
+    
+    .container {
+      padding: 2.5rem 2rem 5rem 2rem;
+    }
+    
+    .sectionTitle {
+      font-size: 2.5rem;
+    }
+  }

@@ -19,7 +19,7 @@ function Hero() {
   const linkedinIcon = theme === 'light' ? linkedinLight : linkedinDark;
 
   return (
-    <section className={styles.container}>
+    <section className={styles.container} style={{paddingTop: 0, marginTop: 0}}>
       <div className={styles.profileSection}>
         <button 
           onClick={toggleTheme}
@@ -61,5 +61,7 @@ function Hero() {
     </section>
   );
 }
+
+
 
 export default Hero;

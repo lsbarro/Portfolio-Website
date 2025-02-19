@@ -10,21 +10,24 @@ function Portfolio() {
       title: "E-commerce Platform",
       description: "Full-stack React & Node.js application with payment processing",
       image: projectsIcon,
-      link: "https://github.com/liamsbarro/ecommerce-platform"
+      link: "https://github.com/liamsbarro/ecommerce-platform",
+      isExternal: true
     },
     {
       id: 2,
       title: "Photography Portfolio",
       description: "Responsive gallery site with dynamic image loading",
       image: photographyIcon,
-      link: "https://photography.liamsbarro.com"
+      link: "/photography",
+      isExternal: false
     },
     {
       id: 3,
       title: "Task Management App",
       description: "React Native mobile application with offline capabilities",
       image: projectsIcon,
-      link: "https://github.com/liamsbarro/task-manager"
+      link: "https://github.com/liamsbarro/task-manager",
+      isExternal: true
     },
   ];
 
@@ -40,6 +43,7 @@ function Portfolio() {
             description={project.description}
             image={project.image}
             link={project.link}
+            isExternal={project.isExternal}
           />
         ))}
       </div>

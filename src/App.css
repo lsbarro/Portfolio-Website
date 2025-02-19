@@ -1,24 +1,9 @@
-/* ---- Global Reset ---- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Fix for white line on right */
-  body, html {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    overflow-x: hidden !important;
-    height: 100%;
-    overscroll-behavior: none;
-  }
-  
-  :root {
+/* ---- Global Reset & Variables ---- */
+:root {
     --background-color: rgba(255, 255, 255, 0.85);
     --btn-color: #0987f2;
     --btn-text-color: #fff;
-    --project-card-bg: #ffffff00;
+    --project-card-bg: transparent;
     --text-color: #85b3e0;
     --form-text-color: #85b3e0;
     --footer-text-color: #6494c9;
@@ -28,6 +13,11 @@
     --scrollbar-bg: transparent;
     --scrollbar-thumb: rgba(133, 179, 224, 0.3);
     --scrollbar-thumb-hover: rgba(133, 179, 224, 0.5);
+    --content-bottom-space: 100px;
+    --ios-bg-height: 300vh;
+    --bg-fallback-color: #000000;
+    --mask-gradient: linear-gradient(to bottom, transparent 0%, var(--background-color) 100%);
+    --transition-speed: 0.3s;
   }
   
   [data-theme="dark"] {
@@ -41,10 +31,41 @@
     --background-overlay: rgba(0, 0, 0, 0.5);
     --scrollbar-thumb: rgba(255, 255, 255, 0.2);
     --scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
+    --mask-gradient: linear-gradient(to bottom, transparent 0%, var(--background-color) 100%);
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+  
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  #root, #root-container {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    top: 0;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   
   /* ---- Scrollbar Styling ---- */
-  /* For Webkit browsers (Chrome, Safari) */
   ::-webkit-scrollbar {
     width: 8px;
     background-color: transparent;
@@ -63,66 +84,114 @@
     background-color: transparent;
   }
   
-  /* For Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) transparent;
+  /* ---- Improved Custom Scrollbar ---- */
+  .custom-scrollbar {
+    position: fixed;
+    top: 0;
+    right: 8px;
+    width: 8px;
+    height: 100vh;
+    z-index: 1000;
+    pointer-events: none;
   }
   
-  /* ---- Parallax Background ---- */
-  .parallax-wrapper {
-    min-height: 100vh;
-    width: 100vw;
-    max-width: 100vw;
-    overflow-x: hidden;
-    overflow-y: visible;
-    perspective: 2px;
-    box-sizing: border-box;
-    position: relative;
-    margin: 0;
-    padding: 0;
-    left: 0;
+  .scrollbar-track {
+    position: absolute;
+    top: 2%;
     right: 0;
+    width: 6px;
+    height: 96%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thumb {
+    position: absolute;
+    width: 6px;
+    background-color: var(--scrollbar-thumb);
+    border-radius: 3px;
+    transition: opacity var(--transition-speed) ease;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  
+  .scrollbar-thumb:hover {
+    opacity: 0.8 !important;
+    background-color: var(--scrollbar-thumb-hover);
+  }
+  
+  /* ---- Optimized Parallax Structure ---- */
+  .parallax-wrapper {
+    height: 100vh;
+    width: 100vw;
+    perspective: 2px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    overscroll-behavior: none;
+    scroll-padding-bottom: var(--content-bottom-space);
+    scrollbar-gutter: stable;
+    scroll-snap-type: y proximity;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    transform-style: preserve-3d;
+    will-change: scroll-position;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Hide webkit scrollbar */
+  .parallax-wrapper::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    background: transparent;
   }
   
   .parallax-bg {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    height: 100%;
     transform-style: preserve-3d;
     z-index: -1;
+    will-change: transform;
   }
   
+  /* Improved background performance */
   .background {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 300vh; /* Increased height to prevent ending - will be adjusted dynamically */
+    height: 100vh;
+    background-color: var(--bg-fallback-color);
     background-image: url("../src/assets/SUNSETBACK.jpg");
-    background-size: 250% auto;
-    background-position: center;
-    background-repeat: no-repeat;
-    transform: translateZ(-2px) scale(2); /* Adjusted scale for slower scrolling - will be adjusted dynamically */
+    background-size: cover;
+    background-position: center top;
+    background-repeat: repeat-y;
+    transform: translateZ(-2px) scale(2);
     will-change: transform;
-    right: 0;
-    margin: 0;
-    padding: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: opacity 0.5s ease;
+    opacity: 0.95; /* Slightly faded initial state */
   }
   
   .background-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: var(--background-overlay);
-    transition: background-color 0.3s ease;
+    transition: background-color var(--transition-speed) ease;
+    z-index: -1;
+    will-change: background-color;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   
-  /* ---- Layout Structure ---- */
+  /* ---- Content Structure ---- */
   .content {
     position: relative;
     z-index: 1;
@@ -132,45 +201,45 @@
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
-    padding: 0;
-    box-sizing: border-box;
+    padding-bottom: calc(var(--content-bottom-space) + 80px);
+    min-height: calc(100vh - var(--content-bottom-space));
     overflow-x: hidden;
-    padding-bottom: 5rem;
-    min-height: 101vh;
+    overflow-y: visible;
+    mask-image: linear-gradient(to bottom, 
+                              black 0%,
+                              black 95%, 
+                              transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, 
+                                      black 0%,
+                                      black 95%, 
+                                      transparent 100%);
+    will-change: contents;
   }
   
-  html, body {
-    margin: 0;
-    padding: 0;
+  /* Content mask for smooth fade effect */
+  .content-mask {
+    position: fixed;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    overflow-x: hidden;
-    max-width: 100%;
+    height: 60px;
+    background: var(--mask-gradient);
+    pointer-events: none;
+    z-index: 5;
+    transition: background var(--transition-speed) ease, 
+                opacity var(--transition-speed) ease,
+                height var(--transition-speed) ease;
+    will-change: opacity;
   }
   
-  body {
-    margin: 0;
+  /* Content container for better visibility */
+  .content-container {
+    position: relative;
+    width: 100%;
+    overflow: visible !important;
+    height: auto;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: transparent;
-    overflow-x: hidden;
-    position: relative;
-    max-width: 100vw;
-    overscroll-behavior-y: none; /* Prevent bounce scrolling */
-  }
-  
-  #root {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
-    max-width: 100vw;
-    box-sizing: border-box;
-    overflow-x: hidden;
-    margin: 0;
-    padding: 0;
+    will-change: contents;
   }
   
   /* ---- Typography ---- */
@@ -178,6 +247,7 @@
     color: var(--text-color);
     margin: 0;
     padding: 0;
+    transition: color var(--transition-speed) ease;
   }
   
   h2, h3, p {
@@ -188,13 +258,13 @@
     text-transform: uppercase;
   }
   
-  h2, h3 {
-    font-size: 20px;
-  }
-  
   h1 {
     font-family: "Rubik", sans-serif;
     font-size: 32px;
+  }
+  
+  h2, h3 {
+    font-size: 20px;
   }
   
   p {
@@ -208,6 +278,79 @@
   
   .hover {
     cursor: pointer;
+  }
+  
+  /* ---- Handle photo gallery content ---- */
+  .photo-gallery-container .content,
+  .photography-portfolio .content,
+  [class*="gallery"] .content,
+  [class*="portfolio"] .content {
+    padding-bottom: calc(var(--content-bottom-space) + 150px) !important;
+  }
+  
+  /* ---- Ensure all interactive elements are visible ---- */
+  .project-card,
+  .gallery-item,
+  .photo-item,
+  .portfolio-item,
+  a[href*="project"],
+  button,
+  .hover,
+  [role="button"],
+  .clickable {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 10 !important;
+    position: relative !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  /* Add subtle hover effect to interactive elements */
+  .project-card:hover,
+  .gallery-item:hover,
+  .photo-item:hover,
+  .portfolio-item:hover,
+  a[href*="project"]:hover,
+  button:hover,
+  .hover:hover,
+  [role="button"]:hover,
+  .clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* ---- Scroll Limiting ---- */
+  .scroll-limiter {
+    height: var(--content-bottom-space);
+    margin-bottom: 0;
+    margin-top: auto;
+    pointer-events: none;
+    display: block;
+    width: 100%;
+    position: relative;
+    scroll-snap-align: end;
+  }
+  
+  /* Hard scroll stop */
+  .scroll-boundary {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  
+  /* ---- Container and Layout ---- */
+  .container, section.container, .content {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+  
+  .header {
+    padding-top: 1.5rem !important;
   }
   
   /* ---- Responsive Adjustments ---- */
@@ -231,6 +374,17 @@
     .sectionTitle {
       margin-bottom: 60px;
     }
+    
+    /* Improved desktop parallax effect */
+    .background {
+      transform: translateZ(-2px) scale(2);
+      background-position: center top;
+      background-size: cover;
+    }
+    
+    .content-mask {
+      height: 80px;
+    }
   }
   
   @media (min-width: 1400px) {
@@ -245,44 +399,152 @@
     .sectionTitle {
       margin-bottom: 75px;
     }
-  }
-
-  /* Add these styles to your App.css file */
-
-/* Fix for top whitespace */
-#root-container {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
+    
+    /* Enhanced large screen parallax */
+    .background {
+      transform: translateZ(-2.5px) scale(2.25);
+    }
   }
   
-  .parallax-wrapper {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
+  @media (max-width: 768px) {
+    /* Optimized mobile parallax effect */
+    .background {
+      background-size: 200% auto;
+      transform: translateZ(-1px) scale(1.5);
+      height: 500vh; /* Much taller background */
+      background-repeat: repeat;
+      background-position: center top;
+      will-change: transform;
+    }
+    
+    .background-overlay {
+      height: 500vh !important; /* Match background height */
+    }
+    
+    :root {
+      --content-bottom-space: 60px;
+    }
+    
+    .content-mask {
+      height: 50px;
+    }
+    
+    /* Improve mobile scrolling */
+    .parallax-wrapper {
+      -webkit-overflow-scrolling: touch;
+    }
   }
   
-  .content {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
+  /* Further optimize for small mobile screens */
+  @media (max-width: 576px) {
+    .background {
+      background-size: 250% auto;
+      transform: translateZ(-1px) scale(1.4);
+    }
   }
   
-  /* Hero section specific fix */
-  .container {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
+  @media (max-width: 375px) {
+    .background {
+      background-size: 300% auto;
+      transform: translateZ(-1px) scale(1.3);
+    }
   }
   
-  /* Ensure the hero is positioned correctly on homepage */
-  section.container:first-of-type {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
+  /* ---- Device Orientation ---- */
+  @media (orientation: portrait) {
+    .background {
+      background-position: center top !important;
+    }
   }
   
-  /* Photography page specific */
-  section.container {
-    padding-top: 0 !important;
+  @media (orientation: landscape) {
+    .background {
+      background-position: center center !important;
+      background-size: cover !important;
+      transform: translateZ(-1.5px) scale(1.75);
+    }
   }
   
-  /* Adjust header position for photography page */
-  .header {
-    padding-top: 1.5rem !important;
+  /* ---- iOS Specific Fixes ---- */
+  @supports (-webkit-touch-callout: none) {
+    .parallax-bg,
+    .background,
+    .background-overlay {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      -webkit-transform-style: preserve-3d;
+      -webkit-backface-visibility: hidden;
+    }
+    
+    .background {
+      transform-origin: top center !important;
+      min-height: var(--ios-bg-height) !important;
+      height: var(--ios-bg-height) !important; /* Explicit height */
+      transform: translateZ(0) scale(1.5) !important; /* Force hardware acceleration */
+      -webkit-perspective: 1000;
+      -webkit-transform: translateZ(0) scale(1.5) !important;
+    }
+    
+    .background-overlay {
+      min-height: var(--ios-bg-height) !important;
+      height: var(--ios-bg-height) !important; /* Explicit height */
+      -webkit-perspective: 1000;
+    }
+    
+    .parallax-wrapper {
+      -webkit-overflow-scrolling: touch;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    /* Fix iOS dark mode overlay */
+    [data-theme="dark"] .background-overlay {
+      background-color: rgba(0, 0, 0, 0.5) !important;
+      opacity: 1 !important;
+      height: 800vh !important; /* Extra height for dark mode */
+      min-height: 800vh !important;
+    }
+    
+    /* Extra insurance for iOS dark mode */
+    [data-theme="dark"] .parallax-bg::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 800vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+      pointer-events: none;
+    }
+  }
+  
+  /* Dark mode transition improvements */
+  [data-theme="dark"] .background {
+    filter: brightness(0.85);
+    transition: filter var(--transition-speed) ease;
+  }
+  
+  [data-theme="dark"] .background-overlay {
+    opacity: 1;
+    transition: opacity var(--transition-speed) ease, 
+                background-color var(--transition-speed) ease;
+    height: 600vh !important; /* Ensure dark mode overlay extends far beyond visible content */
+    min-height: 600vh !important;
+  }
+  
+  /* Animation for theme toggle */
+  @keyframes fadeTheme {
+    0% { opacity: 0.8; }
+    100% { opacity: 1; }
+  }
+  
+  .background,
+  .background-overlay {
+    animation: fadeTheme 0.5s ease forwards;
   }

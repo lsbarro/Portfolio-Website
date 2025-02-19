@@ -7,8 +7,8 @@ function Portfolio() {
   const projects = [
     {
       id: 1,
-      title: "E-commerce Platform",
-      description: "Full-stack React & Node.js application with payment processing",
+      title: "About me",
+      description: "My name, interests, and social security number. ",
       image: projectsIcon,
       link: "https://github.com/liamsbarro/ecommerce-platform",
       isExternal: true
@@ -16,15 +16,15 @@ function Portfolio() {
     {
       id: 2,
       title: "Photography Portfolio",
-      description: "Responsive gallery site with dynamic image loading",
+      description: "A collection of photos I'm proud of.",
       image: photographyIcon,
       link: "/photography",
       isExternal: false
     },
     {
       id: 3,
-      title: "Task Management App",
-      description: "React Native mobile application with offline capabilities",
+      title: "Projects",
+      description: "Ranging from business ideas to chemical art.",
       image: projectsIcon,
       link: "https://github.com/liamsbarro/task-manager",
       isExternal: true

@@ -2,8 +2,8 @@ import styles from "./HeroStyles.module.css";
 import heroImg from "../../assets/hero-img.png";
 import sun from '../../assets/sun.svg';
 import moon from '../../assets/moon.svg';
-import twitterLight from '../../assets/twitter-light.svg';
-import twitterDark from '../../assets/twitter-dark.svg';
+import instagramLight from '../../assets/instagramwhite.png';
+import instagramDark from '../../assets/instagramblack.png';
 import githubLight from '../../assets/github-light.svg';
 import githubDark from '../../assets/github-dark.svg';
 import linkedinLight from '../../assets/linkedin-light.svg';
@@ -14,7 +14,7 @@ import { useTheme } from "../../common/ThemeContext";
 function Hero() {
   const { theme, toggleTheme } = useTheme();
   const themeIcon = theme === 'light' ? sun : moon;
-  const twitterIcon = theme === 'light' ? twitterLight : twitterDark;
+  const instagramIcon = theme === 'light' ? instagramLight : instagramDark;
   const githubIcon = theme === 'light' ? githubLight : githubDark;
   const linkedinIcon = theme === 'light' ? linkedinLight : linkedinDark;
 
@@ -33,22 +33,21 @@ function Hero() {
       <div className={styles.info}>
         <div className={styles.nameTitle}>
           <h1 className={styles.name}>Liam Sbarro</h1>
-          <h2 className={styles.title}>Software Developer</h2>
         </div>
         
         <p className={styles.description}>
-          I'm a passionate software developer focused on creating intuitive and responsive web applications. With expertise in modern JavaScript frameworks and a keen eye for design, I build solutions that deliver exceptional user experiences.
+        I'm a second-year student at UBC interested in studying Mathematics, with a passion for Technology and Finance, particularly focused on developing solutions that enhance and optimize everyday life.
         </p>
         
         <div className={styles.actions}>
           <div className={styles.socialLinks}>
-            <a href="https://twitter.com/liamsbarro" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-              <img src={twitterIcon} alt="Twitter" />
+            <a href="https://www.instagram.com/li.am2005/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <img src={instagramIcon} alt="Instagram" />
             </a>
-            <a href="https://github.com/liamsbarro" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <a href="https://github.com/lsbarro" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
               <img src={githubIcon} alt="GitHub" />
             </a>
-            <a href="https://linkedin.com/in/liamsbarro" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/liam-sbarro-8a2b19211/?originalSubdomain=ca" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <img src={linkedinIcon} alt="LinkedIn" />
             </a>
           </div>

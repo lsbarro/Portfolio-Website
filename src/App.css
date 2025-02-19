@@ -1,54 +1,87 @@
-:root {
+/* ---- Global Reset ---- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Fix for white line on right */
+  body, html {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  :root {
     --background-color: rgba(255, 255, 255, 0.85);
     --btn-color: #0987f2;
     --btn-text-color: #fff;
-    --project-card-bg: rgba(255, 255, 255, 0.9);
-    --text-color: #2c5282;
-    --form-text-color: #4a5568;
-    --footer-text-color: #718096;
+    --project-card-bg: #ffffff00;
+    --text-color: #85b3e0;
+    --form-text-color: #85b3e0;
+    --footer-text-color: #6494c9;
     --background-overlay: none;
-    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    --transition-speed: 0.3s;
+    --profile-bg-light: #ffffff;
+    --profile-bg-dark: #333333;
+    --scrollbar-bg: transparent;
+    --scrollbar-thumb: rgba(133, 179, 224, 0.3);
+    --scrollbar-thumb-hover: rgba(133, 179, 224, 0.5);
   }
   
   [data-theme="dark"] {
-    --background-color: rgba(26, 32, 44, 0.9);
-    --btn-color: #63b3ed;
-    --btn-text-color: #1a202c;
-    --project-card-bg: rgba(45, 55, 72, 0.9);
-    --text-color: #e2e8f0;
-    --form-text-color: #cbd5e0;
-    --footer-text-color: #a0aec0;
+    --background-color: rgba(34, 34, 34, 0.85);
+    --btn-color: #fff;
+    --btn-text-color: #222;
+    --project-card-bg: #fff;
+    --text-color: #fff;
+    --form-text-color: #fff;
+    --footer-text-color: #bbb;
     --background-overlay: rgba(0, 0, 0, 0.5);
-    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
   }
   
-  /* Base Typography */
-  html {
-    font-size: 16px;
-    scroll-behavior: smooth;
+  /* ---- Scrollbar Styling ---- */
+  /* For Webkit browsers (Chrome, Safari) */
+  ::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
   }
   
-  body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu',
-      'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #f7fafc;
-    color: var(--text-color);
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 10px;
   }
   
-  /* Parallax Effect */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  /* For Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+  
+  /* ---- Parallax Background ---- */
   .parallax-wrapper {
     height: 100vh;
+    max-height: 100vh;
+    width: 100vw;
+    max-width: 100vw;
     overflow-x: hidden;
     overflow-y: auto;
     perspective: 2px;
-    max-height: 100vh;
-    scroll-behavior: smooth;
+    box-sizing: border-box;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    right: 0;
   }
   
   .parallax-bg {
@@ -65,18 +98,17 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 200vh;
     background-image: url("../src/assets/SUNSETBACK.jpg");
-    background-size: cover;
+    background-size: 250% auto;
     background-position: center;
     transform: translateZ(-1px) scale(1.5);
-    background-repeat: no-repeat;
-    transition: filter var(--transition-speed) ease;
-  }
-  
-  [data-theme="dark"] .background {
-    filter: brightness(0.7) saturate(1.2);
+    background-repeat: repeat;
+    will-change: transform;
+    right: 0;
+    margin: 0;
+    padding: 0;
   }
   
   .background-overlay {
@@ -84,191 +116,129 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 300vh;
+    height: 225%;
     background-color: var(--background-overlay);
-    transition: background-color var(--transition-speed) ease;
-    pointer-events: none;
+    transition: background-color 0.3s ease;
   }
   
+  /* ---- Layout Structure ---- */
   .content {
     position: relative;
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
     z-index: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
   
-  /* Typography Styles */
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+  
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: transparent;
+    overflow-x: hidden;
+    position: relative;
+    max-width: 100vw;
+  }
+  
+  #root {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* ---- Typography ---- */
   h1, h2, h3, p {
     color: var(--text-color);
     margin: 0;
     padding: 0;
-    transition: color var(--transition-speed) ease;
   }
   
   h2, h3, p {
-    font-family: "Roboto", sans-serif;
+    font-family: "Roboto Mono", monospace;
   }
   
   h1, h2 {
     text-transform: uppercase;
   }
   
+  h2, h3 {
+    font-size: 20px;
+  }
+  
   h1 {
     font-family: "Rubik", sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 0.05em;
-    font-weight: 700;
-  }
-  
-  h2 {
-    font-size: 2rem;
-    font-weight: 600;
-  }
-  
-  h3 {
-    font-size: 1.5rem;
-    font-weight: 500;
+    font-size: 32px;
   }
   
   p {
-    font-size: 1rem;
-    line-height: 1.7;
-    font-weight: 400;
-  }
-  
-  /* Section Styles */
-  section {
-    padding: 4rem 0;
+    font-size: 16px;
+    font-weight: 300;
   }
   
   .sectionTitle {
-    margin-bottom: 3rem;
-    position: relative;
-    display: inline-block;
+    margin-bottom: 30px;
   }
   
   .hover {
     cursor: pointer;
-    transition: transform 0.2s ease;
   }
   
-  .hover:hover {
-    transform: scale(1.05);
-  }
-  
-  /* Navigation */
-  .nav-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    padding: 1rem 0;
-    transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .nav-container.scrolled {
-    background-color: var(--background-color);
-    padding: 0.75rem 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  .nav-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
-  
-  /* Animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
+  /* ---- Responsive Adjustments ---- */
+  @media (min-width: 800px) {
+    #root {
+      gap: 100px;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .fade-in {
-    animation: fadeIn 0.6s ease forwards;
-  }
-  
-  .fade-in-delay-1 {
-    animation: fadeIn 0.6s ease forwards;
-    animation-delay: 0.2s;
-    opacity: 0;
-  }
-  
-  .fade-in-delay-2 {
-    animation: fadeIn 0.6s ease forwards;
-    animation-delay: 0.4s;
-    opacity: 0;
-  }
-  
-  /* Scrollbar styling */
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: rgba(156, 163, 175, 0.5);
-    border-radius: 5px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(156, 163, 175, 0.8);
-  }
-  
-  /* Media Queries */
-  @media (width >= 768px) {
+    
     h1 {
-      font-size: 3rem;
+      font-size: 40px;
     }
     
-    h2 {
-      font-size: 2.25rem;
-    }
-    
-    h3 {
-      font-size: 1.65rem;
+    h2, h3 {
+      font-size: 24px;
     }
     
     p {
-      font-size: 1.125rem;
+      font-size: 20px;
+    }
+    
+    .sectionTitle {
+      margin-bottom: 60px;
     }
   }
   
-  @media (width >= 1024px) {
-    .content {
-      padding: 0 3rem;
-    }
-    
-    section {
-      padding: 6rem 0;
+  @media (min-width: 1400px) {
+    #root {
+      gap: 200px;
     }
     
     h1 {
-      font-size: 3.5rem;
-    }
-  }
-  
-  @media (width >= 1400px) {
-    .content {
-      max-width: 1600px;
-      padding: 0 4rem;
+      font-size: 48px;
     }
     
-    section {
-      padding: 8rem 0;
+    .sectionTitle {
+      margin-bottom: 75px;
     }
   }

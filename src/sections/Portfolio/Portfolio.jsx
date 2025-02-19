@@ -26,27 +26,6 @@ function Portfolio() {
       image: projectsIcon,
       link: "https://github.com/liamsbarro/task-manager"
     },
-    {
-      id: 4,
-      title: "Weather Dashboard",
-      description: "Real-time weather data visualization using D3.js",
-      image: photographyIcon,
-      link: "https://weather.liamsbarro.com"
-    },
-    {
-      id: 5,
-      title: "Personal Finance Tracker",
-      description: "Secure budgeting app with data visualization",
-      image: projectsIcon,
-      link: "https://finance.liamsbarro.com"
-    },
-    {
-      id: 6,
-      title: "Community Forum",
-      description: "Scalable discussion platform with authentication",
-      image: photographyIcon,
-      link: "https://github.com/liamsbarro/community-forum"
-    }
   ];
 
   return (

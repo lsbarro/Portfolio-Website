@@ -10,6 +10,7 @@ import { ThemeProvider } from "./common/ThemeContext";
 import Hero from "./sections/Hero/Hero";
 import Portfolio from "./sections/Portfolio/Portfolio";
 import PhotographyPortfolio from "./sections/Photography/PhotographyPortfolio";
+import Projects from "./sections/Projects/Projects";
 
 // Style constants
 const STYLE_CONSTANTS = {
@@ -159,6 +160,44 @@ const ParallaxContent = () => {
       if (thumb) clearTimeout(thumb.fadeTimeout);
     };
   }, []);
+
+// Custom background scaling for different routes
+useEffect(() => {
+    const adjustBackgroundForRoute = () => {
+      const bg = document.querySelector('.background');
+      if (!bg) return;
+      
+      if (location.pathname === '/projects') {
+        // Less zoomed in background for projects page, but still covering the screen
+        if (window.innerWidth <= 768) {
+          // Mobile adjustments
+          bg.style.backgroundSize = '180% auto';
+          bg.style.transform = 'translateZ(-1px) scale(1.4)';
+        } else {
+          // Desktop adjustments - ensure full coverage
+          bg.style.backgroundSize = 'cover';
+          bg.style.transform = 'translateZ(-1.8px) scale(1.9)';
+          bg.style.backgroundPosition = 'center 25%'; // Show more sky
+        }
+      } else {
+        // Reset to default for other routes
+        if (window.innerWidth <= 768) {
+          bg.style.backgroundSize = '200% auto';
+          bg.style.transform = 'translateZ(-1px) scale(1.5)';
+        } else {
+          bg.style.backgroundSize = 'cover';
+          bg.style.transform = 'translateZ(-2px) scale(2)';
+          bg.style.backgroundPosition = 'center top';
+        }
+      }
+    };
+    
+    adjustBackgroundForRoute();
+    
+    // Update on resize
+    window.addEventListener('resize', adjustBackgroundForRoute);
+    return () => window.removeEventListener('resize', adjustBackgroundForRoute);
+  }, [location.pathname]);
 
   // Theme change detection
   useEffect(() => {
@@ -355,12 +394,29 @@ const ParallaxContent = () => {
         contentContainer.style.willChange = 'contents';
       }
       
-      // Configure background display based on device
-      if (isMobileView) {
-        configureForMobile(elements.bg, viewport.width);
-      } else {
-        configureForDesktop(elements.bg, visibleContentHeight, viewport.height);
-      }
+      // Apply custom background scaling for different routes
+      const adjustBackgroundForRoute = () => {
+        if (location.pathname === '/projects') {
+          // Less zoomed in background for projects page
+          if (isMobileView) {
+            elements.bg.style.backgroundSize = '150% auto';
+            elements.bg.style.transform = 'translateZ(-1px) scale(1.2)';
+          } else {
+            elements.bg.style.backgroundSize = '120% auto';
+            elements.bg.style.transform = 'translateZ(-1.5px) scale(1.6)';
+            elements.bg.style.backgroundPosition = 'center 20%'; // Show more sky
+          }
+        } else {
+          // Default background configuration based on device
+          if (isMobileView) {
+            configureForMobile(elements.bg, viewport.width);
+          } else {
+            configureForDesktop(elements.bg, visibleContentHeight, viewport.height);
+          }
+        }
+      };
+      
+      adjustBackgroundForRoute();
       
       // Update CSS custom property
       document.documentElement.style.setProperty(
@@ -441,6 +497,7 @@ const ParallaxContent = () => {
             }
           />
           <Route path="/photography" element={<PhotographyPortfolio />} />
+          <Route path="/projects" element={<Projects />} />
         </Routes>
       </div>
     </div>

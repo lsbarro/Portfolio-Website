@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./PhotographyPortfolioStyles.module.css";
 import { useTheme } from "../../common/ThemeContext";
@@ -78,6 +78,14 @@ function PhotographyPortfolio() {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [visiblePhotos, setVisiblePhotos] = useState([]);
   const [isIntersecting, setIsIntersecting] = useState({});
+  const scrollYRef = useRef(0);
+  const bodyStylesRef = useRef({
+    position: '',
+    top: '',
+    left: '',
+    right: '',
+    overflow: ''
+  });
 
   // Use imported photos
   const photos = [
@@ -247,13 +255,56 @@ function PhotographyPortfolio() {
     });
   }, []);
 
+  // Handle modal opening
+  const openPhotoModal = (photo) => {
+    // Store current scroll position
+    scrollYRef.current = window.scrollY;
+    
+    // Save original body styles before modifying
+    const body = document.body;
+    bodyStylesRef.current = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      overflow: body.style.overflow
+    };
+    
+    // Fix the body in place
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollYRef.current}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.overflow = 'hidden';
+    
+    // Show the modal with the selected photo
+    setSelectedPhoto(photo);
+  };
+
+  // Handle modal closing
+  const closePhotoModal = () => {
+    // Restore original body styles
+    const body = document.body;
+    body.style.position = bodyStylesRef.current.position;
+    body.style.top = bodyStylesRef.current.top;
+    body.style.left = bodyStylesRef.current.left;
+    body.style.right = bodyStylesRef.current.right;
+    body.style.overflow = bodyStylesRef.current.overflow;
+    
+    // Restore scroll position
+    window.scrollTo(0, scrollYRef.current);
+    
+    // Close the modal
+    setSelectedPhoto(null);
+  };
+
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
     if (!selectedPhoto) return;
 
     // Close modal on Escape key
     if (e.key === "Escape") {
-      setSelectedPhoto(null);
+      closePhotoModal();
       return;
     }
 
@@ -274,14 +325,24 @@ function PhotographyPortfolio() {
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
 
-    // Lock body scroll when modal is open
-    if (selectedPhoto) {
-      document.body.style.overflow = "hidden";
-    }
-
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "auto";
+    };
+  }, [selectedPhoto]);
+
+  // Cleanup function on unmount
+  useEffect(() => {
+    return () => {
+      // If component unmounts with modal open, restore body
+      if (selectedPhoto) {
+        const body = document.body;
+        body.style.position = bodyStylesRef.current.position;
+        body.style.top = bodyStylesRef.current.top;
+        body.style.left = bodyStylesRef.current.left;
+        body.style.right = bodyStylesRef.current.right;
+        body.style.overflow = bodyStylesRef.current.overflow;
+        window.scrollTo(0, scrollYRef.current);
+      }
     };
   }, [selectedPhoto]);
 
@@ -312,28 +373,28 @@ function PhotographyPortfolio() {
           <div
             key={photo.id}
             className={styles.photoItem}
-            onClick={() => setSelectedPhoto(photo)}
+            onClick={() => openPhotoModal(photo)}
             data-id={photo.id}
           >
             <ProgressiveImage
               src={photo.src}
               alt={photo.alt}
               className={styles.image}
-              onClick={() => setSelectedPhoto(photo)}
+              onClick={() => openPhotoModal(photo)}
             />
           </div>
         ))}
       </div>
 
       {selectedPhoto && (
-        <div className={styles.modal} onClick={() => setSelectedPhoto(null)}>
+        <div className={styles.modal} onClick={closePhotoModal}>
           <div
             className={styles.modalContent}
             onClick={(e) => e.stopPropagation()}
           >
             <button
               className={styles.closeButton}
-              onClick={() => setSelectedPhoto(null)}
+              onClick={closePhotoModal}
               aria-label="Close"
             >
               <svg

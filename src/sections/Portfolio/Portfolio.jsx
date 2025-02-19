@@ -10,7 +10,7 @@ function Portfolio() {
       title: "About me",
       description: "My name, interests, and social security number. ",
       image: projectsIcon,
-      link: "https://github.com/liamsbarro/ecommerce-platform",
+      link: "https://github.com/username/ecommerce-platform",
       isExternal: true
     },
     {
@@ -26,8 +26,8 @@ function Portfolio() {
       title: "Projects",
       description: "Ranging from business ideas to chemical art.",
       image: projectsIcon,
-      link: "https://github.com/liamsbarro/task-manager",
-      isExternal: true
+      link: "/projects",
+      isExternal: false
     },
   ];
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "./PhotographyPortfolioStyles.module.css";
 import { useTheme } from "../../common/ThemeContext";
@@ -28,9 +28,56 @@ import SunOverRocks from "./PhotoAssets/SunOverRocks.jpg";
 import SunsetBackground from "./PhotoAssets/SunsetBackground.jpg";
 import Swing from "./PhotoAssets/Swing.jpg";
 
+// Progressive Image component
+const ProgressiveImage = ({ src, alt, className, onClick }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState("");
+  
+  useEffect(() => {
+    // Create low quality placeholder
+    const lowQualitySrc = generateLowQualityPlaceholder(src);
+    setCurrentSrc(lowQualitySrc);
+    
+    // Preload high quality image
+    const highResImage = new Image();
+    highResImage.src = src;
+    highResImage.onload = () => {
+      setCurrentSrc(src);
+      setIsLoaded(true);
+    };
+  }, [src]);
+  
+  // Generate a blur placeholder (in real implementation, you'd have actual thumbnails)
+  const generateLowQualityPlaceholder = (imageSrc) => {
+    // For the example, we're using a generic placeholder
+    // In production, you should generate actual thumbnails
+    return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23f0f0f0'/%3E%3C/svg%3E";
+  };
+  
+  return (
+    <img
+      src={currentSrc}
+      alt={alt}
+      className={className}
+      style={{
+        filter: isLoaded ? 'none' : 'blur(20px)',
+        transition: 'filter 0.3s ease-out',
+      }}
+      onClick={onClick}
+      loading="lazy"
+      onError={(e) => {
+        e.target.onerror = null;
+        e.target.src = "https://via.placeholder.com/600x400?text=Photo";
+      }}
+    />
+  );
+};
+
 function PhotographyPortfolio() {
   const { theme } = useTheme();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [visiblePhotos, setVisiblePhotos] = useState([]);
+  const [isIntersecting, setIsIntersecting] = useState({});
 
   // Use imported photos
   const photos = [
@@ -156,6 +203,50 @@ function PhotographyPortfolio() {
     },
   ];
 
+  // Advanced lazy loading with IntersectionObserver
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '200px', // Load images 200px before they enter viewport
+      threshold: 0.1
+    };
+
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        setIsIntersecting(prev => ({
+          ...prev,
+          [entry.target.dataset.id]: entry.isIntersecting
+        }));
+      });
+    }, observerOptions);
+
+    // Get all image containers
+    const imageElements = document.querySelectorAll(`.${styles.photoItem}`);
+    imageElements.forEach(el => {
+      imageObserver.observe(el);
+    });
+
+    return () => {
+      imageElements.forEach(el => {
+        imageObserver.unobserve(el);
+      });
+    };
+  }, []);
+
+  // Preload critical images (first 4)
+  useEffect(() => {
+    // Preload first few images for immediate display
+    const preloadImages = photos.slice(0, 4).map(photo => photo.src);
+    
+    preloadImages.forEach(imageSrc => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = imageSrc;
+      document.head.appendChild(link);
+    });
+  }, []);
+
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
     if (!selectedPhoto) return;
@@ -180,7 +271,7 @@ function PhotographyPortfolio() {
   };
 
   // Add event listener for keyboard navigation
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
 
     // Lock body scroll when modal is open
@@ -222,17 +313,13 @@ function PhotographyPortfolio() {
             key={photo.id}
             className={styles.photoItem}
             onClick={() => setSelectedPhoto(photo)}
+            data-id={photo.id}
           >
-            <img
+            <ProgressiveImage
               src={photo.src}
-              alt={photo.title}
+              alt={photo.alt}
               className={styles.image}
-              loading="lazy"
-              // Placeholder for demo purposes
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "https://via.placeholder.com/600x400?text=Photo";
-              }}
+              onClick={() => setSelectedPhoto(photo)}
             />
           </div>
         ))}
@@ -266,9 +353,9 @@ function PhotographyPortfolio() {
             </button>
 
             <div className={styles.enlargedImageContainer}>
-              <img
+              <ProgressiveImage
                 src={selectedPhoto.src}
-                alt={selectedPhoto.title}
+                alt={selectedPhoto.alt}
                 className={styles.enlargedImage}
               />
             </div>

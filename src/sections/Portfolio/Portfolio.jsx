@@ -8,7 +8,7 @@ function Portfolio() {
     {
       id: 1,
       title: "About me",
-      description: "My name, interests, and social security number. ",
+      description: "My name, interests. ",
       image: projectsIcon,
       link: "https://github.com/username/ecommerce-platform",
       isExternal: true

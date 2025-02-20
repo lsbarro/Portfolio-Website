@@ -14,7 +14,7 @@
   letter-spacing: 1px;
   margin-bottom: 3rem;
   position: relative;
-  color: var(--text-color);
+  color: var(--portfolio-color);
   text-align: center;
   width: 100%;
 }

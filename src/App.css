@@ -1,10 +1,11 @@
 /* ---- Global Reset & CSS Variables ---- */
 :root {
     --background-color: rgba(255, 255, 255, 0.85);
-    --btn-color: #0987f2;
+    --btn-color: #043866;
     --btn-text-color: #fff;
     --project-card-bg: transparent;
     --text-color: #021d3a;
+    --project-text-color: #737e89;
     --form-text-color: #6b98c4;
     --footer-text-color: #6494c9;
     --background-overlay: rgba(0, 0, 0, 0.35);
@@ -21,14 +22,16 @@
     --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
     --shadow-dark: 0 15px 40px rgba(0, 0, 0, 0.2);
     --vh: 1vh; /* Dynamic viewport height fix */
+    --portfolio-color: #737e89;
   }
   
   [data-theme="dark"] {
     --background-color: rgba(34, 34, 34, 0.85);
-    --btn-color: #fff;
+    --portfolio-color: #ebebeb;
+    --btn-color: #ebebeb;
     --btn-text-color: #222;
     --project-card-bg: rgba(255, 255, 255, 0.05);
-    --text-color: #fff;
+    --text-color: #ebebeb;
     --form-text-color: #fff;
     --footer-text-color: #bbb;
     --background-overlay: rgba(0, 0, 0, 0.65);

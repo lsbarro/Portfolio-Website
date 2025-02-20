@@ -7,6 +7,9 @@ import { useTheme } from "../../common/ThemeContext";
 // Replace these with your actual project images when available
 import projectImage1 from "../../assets/projectsicon.jpeg";
 import projectImage2 from "../../assets/photographyicon.jpg";
+
+import eInk1 from "./Project Photos/E-ink 1.jpg";
+import eInk2 from "./Project Photos/E-ink 2.jpg";
 // Import additional project images as needed
 
 // ProjectSection component for individual project display
@@ -280,38 +283,38 @@ function Projects() {
   const projects = [
     {
       id: 1,
-      title: "Algorithmic Trading Platform",
-      description: "Developed a quantitative trading system that analyzes market data to identify profitable trading opportunities.",
-      category: "Finance",
+      title: "E-ink dynamic pricetag for grocery stores",
+      description: "Developed a business plan, and demo, for a monotized way to solve food waste in grocery stores.",
+      category: "Business",
       images: [
         { 
-          src: projectImage1,
-          alt: "Trading algorithm dashboard", 
-          caption: "Main dashboard showing performance metrics"
+          src: eInk1,
+          alt: "Demo of e-ink", 
+          caption: "Demo of e-ink"
         },
         { 
-          src: projectImage2,
-          alt: "Trading algorithm architecture",
-          caption: "System architecture diagram" 
+          src: eInk2,
+          alt: "Demo of e-ink",
+          caption: "Demo of e-ink" 
         },
       ],
       details: [
-        "Created mathematical models to predict market movements",
-        "Implemented real-time data processing pipeline",
-        "Backtested strategies against 10 years of historical data",
-        "Achieved 12% annual return over a 3-year simulation period"
+        "",
+        "Provides grocery retailers with automated dynamic pricing through e-ink technology that adjusts based on produce freshness.",
+        "Transforms potential waste into revenue by intelligently pricing items to sell before they spoil",
+        "Store managers receive data-driven insights to optimize inventory without labor-intensive manual checks",
+        "The system enhances customer experience by offering transparent pricing while promoting sustainable retail practices"
       ],
-      technologies: ["Python", "TensorFlow", "AWS", "MongoDB", "Pandas"],
+      technologies: ["Python", "Raspberry Pi", "E-ink display"],
       links: [
-        { text: "View Code", url: "https://github.com/username/project" },
-        { text: "Research Paper", url: "https://example.com/paper" }
+        { text: "View Pitch", url: "https://www.dropbox.com/scl/fi/whyyy2c0nsfbc8zq2cvxm/Comm-280-Final-Presentation.pdf?rlkey=ct992c3aveu0hnbuowr6hisk1&st=f2qsxo9a&dl=0" },
       ]
     },
     {
       id: 2,
-      title: "Chemical Art Installation",
-      description: "An interactive art installation showcasing chemical reactions through a controlled environment, creating visual patterns based on audience interaction.",
-      category: "Art",
+      title: "Simple energy monitoring system",
+      description: "",
+      category: "Computer Science",
       images: [
         { 
           src: projectImage2,
@@ -330,7 +333,7 @@ function Projects() {
         "Developed motion sensors that trigger different chemical combinations",
         "Collaborated with chemistry department on sustainable materials"
       ],
-      technologies: ["Arduino", "Chemistry", "LED Systems", "Motion Sensors", "Glass Fabrication"],
+      technologies: ["Java"],
       links: [
         { text: "Gallery", url: "https://example.com/chemical-art" },
         { text: "Process Documentation", url: "https://example.com/process" }

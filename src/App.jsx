@@ -12,117 +12,187 @@ import Portfolio from "./sections/Portfolio/Portfolio";
 import PhotographyPortfolio from "./sections/Photography/PhotographyPortfolio";
 import Projects from "./sections/Projects/Projects";
 
-// Style constants
-const STYLE_CONSTANTS = {
-  mobile: {
-    breakpoint: 768,
-    extraSmall: 375,
-    small: 576,
-    bottomPadding: 60,
-  },
-  desktop: {
-    bottomPadding: 100,
-  },
-  rootStyles: {
-    display: "block",
-    overflow: "hidden",
-    width: "100vw",
-    maxWidth: "100vw",
-  },
-  wrapperStyles: {
-    width: "100vw",
-    maxWidth: "100vw",
-    margin: 0,
-    padding: 0,
-    flex: "none",
-    overflowX: "hidden",
-    left: 0,
-    right: 0,
-    position: "relative",
-  }
-};
-
-/**
- * Ensures all project links and interactive elements are visible
- */
-const makeSureInteractivesAreVisible = () => {
-  const interactiveElements = document.querySelectorAll(
-    '.project-card, .gallery-item, .photo-item, .portfolio-item, a[href*="project"], button, .hover, [role="button"], .clickable'
-  );
-  
-  interactiveElements.forEach(item => {
-    if (item) {
-      item.style.opacity = '1';
-      item.style.visibility = 'visible';
-      item.style.pointerEvents = 'auto';
-      item.style.position = 'relative';
-      item.style.zIndex = '10';
-    }
-  });
-};
-
-/**
- * Manages parallax scrolling content with dynamic sizing
- * @returns {JSX.Element} The parallax content component
- */
+// Improved parallax content component with optimized performance
 const ParallaxContent = () => {
-  const contentRef = useRef(null);
-  const [contentHeight, setContentHeight] = useState(0);
   const location = useLocation();
+  const wrapperRef = useRef(null);
+  const contentRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Handle device detection
+  // Set up resize observer for responsive handling
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= STYLE_CONSTANTS.mobile.breakpoint);
+    // Initialize viewport dimensions and device detection
+    const updateViewportDimensions = () => {
+      setViewportHeight(window.innerHeight);
+      setViewportWidth(window.innerWidth);
+      setIsMobile(window.innerWidth <= 768);
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    // Initial call
+    updateViewportDimensions();
+
+    // Set up resize observer for more efficient handling
+    const resizeObserver = new ResizeObserver((entries) => {
+      requestAnimationFrame(() => {
+        updateViewportDimensions();
+      });
+    });
+
+    resizeObserver.observe(document.documentElement);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  // Handle scroll effects
+  useEffect(() => {
+    if (!wrapperRef.current) return;
+
+    const wrapper = wrapperRef.current;
+    
+    // Optimized scroll handler using requestAnimationFrame
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (wrapper) {
+            const scrollTop = wrapper.scrollTop;
+            const scrollHeight = wrapper.scrollHeight;
+            const clientHeight = wrapper.clientHeight;
+            const maxScroll = scrollHeight - clientHeight;
+            const progress = maxScroll <= 0 ? 0 : scrollTop / maxScroll;
+            
+            setScrollProgress(progress);
+            
+            // Apply parallax effect directly to background
+            const background = document.querySelector('.parallax-bg');
+            if (background) {
+              // Different parallax rate based on route
+              const parallaxRate = location.pathname === '/projects' ? 0.4 : 0.5;
+              const translateY = scrollTop * parallaxRate;
+              
+              background.style.transform = `translate3d(0, ${-translateY}px, 0)`;
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    wrapper.addEventListener('scroll', handleScroll);
+    
+    // Initial calculation
+    handleScroll();
+    
+    return () => {
+      wrapper.removeEventListener('scroll', handleScroll);
+    };
+  }, [location.pathname]);
+
+  // Custom styling for different routes
+  useEffect(() => {
+    // Apply route-specific background adjustments
+    const applyRouteSpecificStyles = () => {
+      const background = document.querySelector('.background');
+      const overlay = document.querySelector('.background-overlay');
+      
+      if (!background || !overlay) return;
+      
+      // Common properties
+      background.style.transition = 'opacity 0.5s ease';
+      background.style.willChange = 'transform';
+      
+      if (location.pathname === '/projects') {
+        // Projects page gets slightly darker overlay
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+        background.style.opacity = '0.9';
+      } else if (location.pathname === '/photography') {
+        // Photography page gets clearer view
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+        background.style.opacity = '1';
+      } else {
+        // Home page default
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+        background.style.opacity = '0.95';
+      }
+    };
+    
+    applyRouteSpecificStyles();
+    
+  }, [location.pathname]);
+
+  // Apply theme-specific adjustments
+  useEffect(() => {
+    const handleThemeChange = () => {
+      const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+      const overlay = document.querySelector('.background-overlay');
+      
+      if (overlay) {
+        overlay.style.backgroundColor = isDarkMode 
+          ? 'rgba(0, 0, 0, 0.65)' 
+          : 'rgba(0, 0, 0, 0.35)';
+        
+        overlay.style.transition = 'background-color 0.5s ease';
+      }
+    };
+    
+    // Set up mutation observer to detect theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          handleThemeChange();
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, { attributes: true });
+    
+    // Initial call
+    handleThemeChange();
+    
+    return () => observer.disconnect();
   }, []);
 
   // Create custom scrollbar
   useEffect(() => {
-    const createCustomScrollbar = () => {
-      // Remove any existing scrollbar to prevent duplicates
+    const createScrollbar = () => {
       const existingScrollbar = document.querySelector('.custom-scrollbar');
       if (existingScrollbar) {
-        existingScrollbar.remove();
+        return existingScrollbar;
       }
       
-      // Create scrollbar container
-      const scrollbarContainer = document.createElement('div');
-      scrollbarContainer.className = 'custom-scrollbar';
-      document.body.appendChild(scrollbarContainer);
+      const scrollbar = document.createElement('div');
+      scrollbar.className = 'custom-scrollbar';
       
-      // Create track
       const track = document.createElement('div');
       track.className = 'scrollbar-track';
-      scrollbarContainer.appendChild(track);
+      scrollbar.appendChild(track);
       
-      // Create thumb
       const thumb = document.createElement('div');
       thumb.className = 'scrollbar-thumb';
       track.appendChild(thumb);
       
-      return { container: scrollbarContainer, track, thumb };
+      document.body.appendChild(scrollbar);
+      return scrollbar;
     };
     
-    const { thumb } = createCustomScrollbar();
+    const scrollbar = createScrollbar();
+    const thumb = scrollbar.querySelector('.scrollbar-thumb');
     
-    // Update scrollbar position
+    // Update scrollbar position based on scroll progress
     const updateScrollbarPosition = () => {
-      const wrapper = document.querySelector('.parallax-wrapper');
-      if (!wrapper || !thumb) return;
+      if (!thumb) return;
       
-      const scrollPercent = wrapper.scrollTop / (wrapper.scrollHeight - wrapper.clientHeight || 1);
-      const thumbHeight = Math.max(40, (wrapper.clientHeight / wrapper.scrollHeight) * wrapper.clientHeight * 0.96);
+      const height = Math.max(40, (1 - scrollProgress) * viewportHeight * 0.3);
+      const position = scrollProgress * (viewportHeight - height - 40);
       
-      thumb.style.height = `${thumbHeight}px`;
-      thumb.style.top = `${scrollPercent * (wrapper.clientHeight * 0.96 - thumbHeight)}px`;
-      
-      // Show scrollbar when scrolling
+      thumb.style.height = `${height}px`;
+      thumb.style.top = `${position}px`;
       thumb.style.opacity = '0.6';
       
       clearTimeout(thumb.fadeTimeout);
@@ -131,14 +201,10 @@ const ParallaxContent = () => {
       }, 1500);
     };
     
-    // Add scroll event listener
-    const wrapper = document.querySelector('.parallax-wrapper');
-    if (wrapper) {
-      wrapper.addEventListener('scroll', updateScrollbarPosition);
-      updateScrollbarPosition();
-    }
+    // Update on scroll progress change
+    updateScrollbarPosition();
     
-    // Show scrollbar on mouse move
+    // Mouse movement shows scrollbar
     const handleMouseMove = () => {
       if (thumb) {
         thumb.style.opacity = '0.6';
@@ -153,475 +219,163 @@ const ParallaxContent = () => {
     document.addEventListener('mousemove', handleMouseMove);
     
     return () => {
-      if (wrapper) {
-        wrapper.removeEventListener('scroll', updateScrollbarPosition);
-      }
       document.removeEventListener('mousemove', handleMouseMove);
       if (thumb) clearTimeout(thumb.fadeTimeout);
     };
-  }, []);
+  }, [scrollProgress, viewportHeight]);
 
-// Custom background scaling for different routes
-useEffect(() => {
-    const adjustBackgroundForRoute = () => {
-      const bg = document.querySelector('.background');
-      if (!bg) return;
-      
-      if (location.pathname === '/projects') {
-        // Less zoomed in background for projects page, but still covering the screen
-        if (window.innerWidth <= 768) {
-          // Mobile adjustments
-          bg.style.backgroundSize = '180% auto';
-          bg.style.transform = 'translateZ(-1px) scale(1.4)';
-        } else {
-          // Desktop adjustments - ensure full coverage
-          bg.style.backgroundSize = 'cover';
-          bg.style.transform = 'translateZ(-1.8px) scale(1.9)';
-          bg.style.backgroundPosition = 'center 25%'; // Show more sky
-        }
-      } else {
-        // Reset to default for other routes
-        if (window.innerWidth <= 768) {
-          bg.style.backgroundSize = '200% auto';
-          bg.style.transform = 'translateZ(-1px) scale(1.5)';
-        } else {
-          bg.style.backgroundSize = 'cover';
-          bg.style.transform = 'translateZ(-2px) scale(2)';
-          bg.style.backgroundPosition = 'center top';
-        }
-      }
-    };
-    
-    adjustBackgroundForRoute();
-    
-    // Update on resize
-    window.addEventListener('resize', adjustBackgroundForRoute);
-    return () => window.removeEventListener('resize', adjustBackgroundForRoute);
-  }, [location.pathname]);
-
-  // Theme change detection
+  // Ensure interactive elements remain visible
   useEffect(() => {
-    const handleThemeChange = () => {
-      const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
-      const overlay = document.querySelector(".background-overlay");
-      
-      if (overlay && isDarkMode) {
-        // Ensure dark mode overlay extends fully
-        overlay.style.opacity = "1";
-        overlay.style.height = "600vh";
-        overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-      }
-    };
-    
-    // Initial check
-    handleThemeChange();
-    
-    // Setup mutation observer to detect theme changes
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'data-theme') {
-          handleThemeChange();
+    const ensureInteractivesAreVisible = () => {
+      document.querySelectorAll(
+        '.project-card, .gallery-item, .photo-item, .portfolio-item, a[href*="project"], button, .hover, [role="button"], .clickable'
+      ).forEach(item => {
+        if (item) {
+          item.style.opacity = '1';
+          item.style.visibility = 'visible';
+          item.style.pointerEvents = 'auto';
+          item.style.position = 'relative';
+          item.style.zIndex = '10';
         }
       });
+    };
+    
+    // Run after content renders
+    requestAnimationFrame(() => {
+      ensureInteractivesAreVisible();
     });
     
-    observer.observe(document.documentElement, { attributes: true });
-    
-    return () => observer.disconnect();
-  }, []);
-
-  // Handle parallax scaling and content visibility
-  useEffect(() => {
-    /**
-     * Creates a gradient mask for content fade-out
-     */
-    const createContentMask = () => {
-      let mask = document.querySelector('.content-mask');
-      if (!mask) {
-        mask = document.createElement('div');
-        mask.className = 'content-mask';
-        document.body.appendChild(mask);
-      }
-      
-      // Style the mask to blend with background
-      mask.style.position = 'fixed';
-      mask.style.bottom = '0';
-      mask.style.left = '0';
-      mask.style.width = '100%';
-      mask.style.height = '40px'; 
-      mask.style.background = 'linear-gradient(to bottom, transparent 0%, var(--background-color) 100%)';
-      mask.style.pointerEvents = 'none';
-      mask.style.zIndex = '5';
-      mask.style.opacity = '0.8';
-    };
-
-    /**
-     * Special handling for photo galleries
-     * @param {number} bottomPadding - Base padding amount
-     */
-    const handlePhotoGallery = (bottomPadding) => {
-      // Find gallery container
-      const galleryContainer = document.querySelector('.photo-gallery-container, .photography-portfolio');
-      if (galleryContainer) {
-        // Add extra space for last row of photos
-        const additionalSpace = 150;
-        
-        // Adjust content padding
-        if (contentRef.current) {
-          contentRef.current.style.paddingBottom = `${bottomPadding + additionalSpace}px`;
-        }
-        
-        // Update mask for photo galleries - make it minimal
-        const mask = document.querySelector('.content-mask');
-        if (mask) {
-          mask.style.height = '30px';
-          mask.style.opacity = '0.6';
-          mask.style.background = 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--background-color) 100%)';
-        }
-        
-        // Ensure all photos are visible
-        const photoItems = galleryContainer.querySelectorAll('.photo-item, .gallery-item');
-        if (photoItems && photoItems.length > 0) {
-          photoItems.forEach(item => {
-            if (item) item.style.opacity = '1';
-          });
-        }
-      }
-    };
-
-    /**
-     * Configures background for mobile devices
-     * @param {HTMLElement} bgElement - The background element
-     * @param {number} width - The viewport width
-     */
-    const configureForMobile = (bgElement, width) => {
-      let scale, bgSize;
-      
-      if (width <= STYLE_CONSTANTS.mobile.extraSmall) {
-        scale = 1.3;
-        bgSize = '300% auto';
-      } else if (width <= STYLE_CONSTANTS.mobile.small) {
-        scale = 1.4;
-        bgSize = '250% auto';
-      } else {
-        scale = 1.5;
-        bgSize = '200% auto';
-      }
-      
-      bgElement.style.backgroundRepeat = 'repeat';
-      bgElement.style.transform = `translateZ(-1px) scale(${scale})`;
-      bgElement.style.willChange = 'transform';
-      bgElement.style.backgroundSize = bgSize;
-      bgElement.style.backfaceVisibility = 'hidden';
-    };
-
-    /**
-     * Configures background for desktop devices
-     * @param {HTMLElement} bgElement - The background element
-     * @param {number} contentHeight - The content height
-     * @param {number} viewportHeight - The viewport height
-     */
-    const configureForDesktop = (bgElement, contentHeight, viewportHeight) => {
-      const scaleFactor = Math.max(2, 1 + (contentHeight / viewportHeight) * 0.3);
-      bgElement.style.transform = `translateZ(-2px) scale(${scaleFactor})`;
-      bgElement.style.willChange = 'transform';
-      bgElement.style.backgroundSize = 'cover';
-      bgElement.style.backgroundRepeat = 'repeat-y';
-      bgElement.style.backfaceVisibility = 'hidden';
-    };
-
-    /**
-     * Updates background scaling and limits scrolling based on content height
-     */
-    const updateParallaxScale = () => {
-      if (!contentRef.current) return;
-
-      const height = contentRef.current.scrollHeight;
-      setContentHeight(height);
-      
-      // Get required elements
-      const elements = {
-        bg: document.querySelector('.background'),
-        overlay: document.querySelector('.background-overlay'),
-        wrapper: document.querySelector('.parallax-wrapper'),
-      };
-      
-      if (!elements.bg || !elements.overlay || !elements.wrapper) return;
-      
-      const viewport = {
-        height: window.innerHeight,
-        width: window.innerWidth,
-      };
-      const isMobileView = viewport.width <= STYLE_CONSTANTS.mobile.breakpoint;
-      
-      // Configure dimensions
-      const bottomPadding = isMobileView 
-        ? STYLE_CONSTANTS.mobile.bottomPadding 
-        : STYLE_CONSTANTS.desktop.bottomPadding;
-        
-      // Calculate visible content height to prevent cutoff
-      const visibleContentHeight = Math.max(
-        height, 
-        viewport.height * 1.2
-      );
-      const maxScrollHeight = visibleContentHeight + bottomPadding;
-      
-      // Ensure background extends well beyond content
-      const backgroundExtension = viewport.height * 2;
-      const totalBackgroundHeight = Math.max(maxScrollHeight + backgroundExtension, viewport.height * 4);
-      
-      // Apply dimensions with extra safety margin
-      elements.bg.style.height = `${totalBackgroundHeight}px`;
-      elements.overlay.style.height = `${totalBackgroundHeight}px`;
-      
-      // Ensure overlay extends fully in dark mode
-      if (document.documentElement.getAttribute('data-theme') === 'dark') {
-        elements.overlay.style.opacity = '1';
-        elements.overlay.style.height = `${totalBackgroundHeight * 1.5}px`;
-      }
-      
-      // Make sure wrapper can scroll properly
-      elements.wrapper.style.overscrollBehavior = 'none';
-      elements.wrapper.style.willChange = 'scroll-position';
-      
-      // Setup content container
-      const contentContainer = document.querySelector('.content-container');
-      if (contentContainer) {
-        contentContainer.style.overflow = 'visible';
-        contentContainer.style.height = 'auto';
-        contentContainer.style.minHeight = '100vh';
-        contentContainer.style.maxHeight = 'none';
-        contentContainer.style.willChange = 'contents';
-      }
-      
-      // Apply custom background scaling for different routes
-      const adjustBackgroundForRoute = () => {
-        if (location.pathname === '/projects') {
-          // Less zoomed in background for projects page
-          if (isMobileView) {
-            elements.bg.style.backgroundSize = '150% auto';
-            elements.bg.style.transform = 'translateZ(-1px) scale(1.2)';
-          } else {
-            elements.bg.style.backgroundSize = '120% auto';
-            elements.bg.style.transform = 'translateZ(-1.5px) scale(1.6)';
-            elements.bg.style.backgroundPosition = 'center 20%'; // Show more sky
-          }
-        } else {
-          // Default background configuration based on device
-          if (isMobileView) {
-            configureForMobile(elements.bg, viewport.width);
-          } else {
-            configureForDesktop(elements.bg, visibleContentHeight, viewport.height);
-          }
-        }
-      };
-      
-      adjustBackgroundForRoute();
-      
-      // Update CSS custom property
-      document.documentElement.style.setProperty(
-        '--content-bottom-space', 
-        `${bottomPadding}px`
-      );
-      
-      // Handle special case for photo galleries
-      if (location.pathname.includes('/photography')) {
-        handlePhotoGallery(bottomPadding);
-      }
-      
-      // Create gradient mask for content fade-out
-      createContentMask();
-
-      // Make sure all interactive elements are visible
-      makeSureInteractivesAreVisible();
-    };
-
-    /**
-     * Forces background to align to top of viewport
-     */
-    const forceTopAlignment = () => {
-      const elements = {
-        bg: document.querySelector(".background"),
-        overlay: document.querySelector(".background-overlay")
-      };
-
-      if (elements.bg && elements.overlay) {
-        elements.bg.style.top = "0";
-        elements.overlay.style.top = "0";
-        
-        // Ensure dark mode overlay extends fully
-        if (document.documentElement.getAttribute('data-theme') === 'dark') {
-          elements.overlay.style.opacity = "1";
-          elements.overlay.style.height = "600vh";
-        }
-        
-        requestAnimationFrame(updateParallaxScale);
-      }
-    };
-
-    // Setup events and initial state
-    updateParallaxScale();
-    forceTopAlignment();
-    
-    // Debounced resize handler for better performance
-    let resizeTimer;
-    const handleResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        updateParallaxScale();
-        forceTopAlignment();
-      }, 100);
-    };
-    
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("orientationchange", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("orientationchange", handleResize);
-      clearTimeout(resizeTimer);
-    };
-  }, [location.pathname, contentHeight, isMobile]);
+    // Also run on route changes
+    return () => ensureInteractivesAreVisible();
+  }, [location.pathname]);
 
   return (
-    <div className="content-container">
-      <div className="content" ref={contentRef} style={{ paddingTop: 0, marginTop: 0 }}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Hero />
-                <Portfolio />
-              </>
-            }
-          />
-          <Route path="/photography" element={<PhotographyPortfolio />} />
-          <Route path="/projects" element={<Projects />} />
-        </Routes>
+    <div className="parallax-wrapper" ref={wrapperRef}>
+      <div className="content-container">
+        <div className="content" ref={contentRef}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <Hero />
+                  <Portfolio />
+                </>
+              }
+            />
+            <Route path="/photography" element={<PhotographyPortfolio />} />
+            <Route path="/projects" element={<Projects />} />
+          </Routes>
+        </div>
+        <div className="scroll-limiter"></div>
       </div>
     </div>
   );
 };
 
 /**
- * Main application component
- * @returns {JSX.Element} The App component
+ * Main application component with improved performance
  */
 function App() {
+  // Set up iOS detection for better compatibility
+  const [isIOS, setIsIOS] = useState(false);
+
   useEffect(() => {
-    /**
-     * Forces browser reflow to fix initial rendering issues
-     */
-    const forceReflow = () => {
-      const elements = {
-        bg: document.querySelector(".background"),
-        overlay: document.querySelector(".background-overlay")
-      };
-
-      if (!elements.bg || !elements.overlay) return;
-
-      // Use requestAnimationFrame for more efficient reflow
-      requestAnimationFrame(() => {
-        // Toggle display to force reflow
-        ['bg', 'overlay'].forEach(el => {
-          elements[el].style.display = "none";
-          void elements[el].offsetHeight; // Force reflow
-          elements[el].style.display = "block";
-        });
-      });
-    };
-
-    /**
-     * Applies iOS-specific fixes
-     */
-    const applyIOSFixes = () => {
-      const isIOS =
-        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    // Check for iOS
+    const checkIOSDevice = () => {
+      const isAppleDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
         (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-
-      if (!isIOS) return;
-
-      document.documentElement.style.setProperty("--ios-bg-height", "600vh");
-
-      const elements = {
-        bg: document.querySelector(".background"),
-        overlay: document.querySelector(".background-overlay")
-      };
-
-      if (!elements.bg || !elements.overlay) return;
-
-      // Apply iOS-specific optimizations
-      Object.values(elements).forEach(el => {
-        el.style.position = "fixed";
-        el.style.top = "0";
-        el.style.height = "600vh";
-        el.style.transform = `translateZ(0)`;
-        el.style.webkitOverflowScrolling = "touch";
-      });
-
-      // Fix iOS background attachment issues
-      elements.bg.style.backgroundAttachment = "fixed";
-      elements.bg.style.webkitBackfaceVisibility = "hidden";
       
-      // Extra height for dark mode on iOS
-      if (document.documentElement.getAttribute('data-theme') === 'dark') {
-        elements.overlay.style.height = "800vh";
-        elements.overlay.style.opacity = "1";
-        elements.overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+      setIsIOS(isAppleDevice);
+      
+      if (isAppleDevice) {
+        document.documentElement.classList.add('ios-device');
       }
     };
+    
+    checkIOSDevice();
 
-    /**
-     * Ensures background displays properly
-     */
-    const optimizeBackgroundDisplay = () => {
-      const bg = document.querySelector(".background");
-      if (!bg) return;
+    // Initialize background with optimized loading
+    const setupBackground = () => {
+      const background = document.querySelector('.background');
       
-      // Set background color during image load
-      bg.style.backgroundColor = "var(--bg-fallback-color)";
+      if (!background) return;
       
-      // Preload image with improved error handling
+      // Set fallback color during load
+      background.style.backgroundColor = 'var(--bg-fallback-color)';
+      
+      // Preload image for smooth transition
       const img = new Image();
+      const imgSrc = "../src/assets/SUNSETBACK.jpg";
+      
       img.onload = () => {
         requestAnimationFrame(() => {
-          bg.style.backgroundImage = `url("${img.src}")`;
-          bg.style.opacity = "1";
+          background.style.backgroundImage = `url(${imgSrc})`;
+          background.style.opacity = '1';
+          
+          // Force reflow to ensure background properly displays
+          setTimeout(() => {
+            background.style.transform = 'translateZ(0)';
+          }, 100);
         });
       };
+      
       img.onerror = () => {
         console.warn("Background image failed to load, using fallback color");
-        bg.style.opacity = "1";
+        background.style.opacity = '1';
       };
-      img.src = "../src/assets/SUNSETBACK.jpg";
       
-      // Apply performance optimizations
-      bg.style.willChange = "transform";
-      bg.style.backfaceVisibility = "hidden";
+      img.src = imgSrc;
     };
-
-    // Execute initialization in optimal sequence
-    requestAnimationFrame(() => {
-      optimizeBackgroundDisplay();
-      setTimeout(() => {
-        applyIOSFixes();
-        forceReflow();
-      }, 50);
-    });
-  }, []);
+    
+    setupBackground();
+    
+    // Create consistent height for mobile devices and apply iOS fixes
+    const setupMobileHeight = () => {
+      // Fix vh units on mobile
+      const setTrueHeight = () => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      };
+      
+      setTrueHeight();
+      window.addEventListener('resize', setTrueHeight);
+      
+      // Special iOS fixes
+      if (isIOS) {
+        document.documentElement.style.setProperty('--ios-safe-bottom', '0px');
+        
+        // Apply iOS-specific styles (more in CSS)
+        const background = document.querySelector('.background');
+        const overlay = document.querySelector('.background-overlay');
+        
+        if (background && overlay) {
+          background.classList.add('ios-background');
+          overlay.classList.add('ios-overlay');
+        }
+        
+        // Handle orientation changes specially for iOS
+        window.addEventListener('orientationchange', () => {
+          setTimeout(setTrueHeight, 200);
+        });
+      }
+      
+      return () => window.removeEventListener('resize', setTrueHeight);
+    };
+    
+    setupMobileHeight();
+    
+  }, [isIOS]);
 
   return (
     <ThemeProvider>
       <Router>
-        <div style={STYLE_CONSTANTS.rootStyles} id="root-container">
-          <div className="parallax-wrapper" style={STYLE_CONSTANTS.wrapperStyles}>
-            <div className="parallax-bg">
-              <div className="background"></div>
-              <div className="background-overlay"></div>
-            </div>
-            <ParallaxContent />
+        <div id="root-container">
+          <div className="parallax-bg">
+            <div className="background"></div>
+            <div className="background-overlay"></div>
           </div>
+          <ParallaxContent />
         </div>
       </Router>
     </ThemeProvider>

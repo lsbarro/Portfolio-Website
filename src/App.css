@@ -1,48 +1,65 @@
-/* ---- Global Reset & Variables ---- */
+/* ---- Global Reset & CSS Variables ---- */
 :root {
     --background-color: rgba(255, 255, 255, 0.85);
     --btn-color: #0987f2;
     --btn-text-color: #fff;
     --project-card-bg: transparent;
-    --text-color: #94a5b7;
+    --text-color: #021d3a;
     --form-text-color: #6b98c4;
     --footer-text-color: #6494c9;
-    --background-overlay: none;
-    --profile-bg-light: #ffffff;
-    --profile-bg-dark: #333333;
+    --background-overlay: rgba(0, 0, 0, 0.35);
+    --profile-bg-light: #90909022;
+    --profile-bg-dark: #1b242d0b;
     --scrollbar-bg: transparent;
     --scrollbar-thumb: rgba(133, 179, 224, 0.3);
     --scrollbar-thumb-hover: rgba(133, 179, 224, 0.5);
     --content-bottom-space: 100px;
-    --ios-bg-height: 300vh;
     --bg-fallback-color: #000000;
     --mask-gradient: linear-gradient(to bottom, transparent 0%, var(--background-color) 100%);
     --transition-speed: 0.3s;
+    --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --shadow-dark: 0 15px 40px rgba(0, 0, 0, 0.2);
+    --vh: 1vh; /* Dynamic viewport height fix */
   }
   
   [data-theme="dark"] {
     --background-color: rgba(34, 34, 34, 0.85);
     --btn-color: #fff;
     --btn-text-color: #222;
-    --project-card-bg: #fff;
+    --project-card-bg: rgba(255, 255, 255, 0.05);
     --text-color: #fff;
     --form-text-color: #fff;
     --footer-text-color: #bbb;
-    --background-overlay: rgba(0, 0, 0, 0.5);
+    --background-overlay: rgba(0, 0, 0, 0.65);
     --scrollbar-thumb: rgba(255, 255, 255, 0.2);
     --scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
     --mask-gradient: linear-gradient(to bottom, transparent 0%, var(--background-color) 100%);
+    --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.2);
+    --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.3);
+    --shadow-dark: 0 15px 40px rgba(0, 0, 0, 0.4);
   }
   
+  /* ---- Base Reset ---- */
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-thumb) transparent;
+    -webkit-tap-highlight-color: transparent;
   }
   
-  html, body {
+  html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  body {
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -51,13 +68,12 @@
     padding: 0;
     background-color: #000;
     overscroll-behavior: none;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
   }
   
   #root, #root-container {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     position: relative;
     top: 0;
@@ -65,66 +81,58 @@
     padding: 0 !important;
   }
   
-  /* ---- Scrollbar Styling ---- */
-  ::-webkit-scrollbar {
-    width: 8px;
-    background-color: transparent;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar-thumb);
-    border-radius: 10px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--scrollbar-thumb-hover);
-  }
-  
-  ::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-  
-  /* ---- Improved Custom Scrollbar ---- */
-  .custom-scrollbar {
+  /* ---- Optimized Parallax Structure ---- */
+  .parallax-bg {
     position: fixed;
     top: 0;
-    right: 8px;
-    width: 8px;
-    height: 100vh;
-    z-index: 1000;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
     pointer-events: none;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
   }
   
-  .scrollbar-track {
+  .background {
     position: absolute;
-    top: 2%;
-    right: 0;
-    width: 6px;
-    height: 96%;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 3px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-fallback-color);
+    background-image: url("../src/assets/SUNSETBACK.jpg");
+    background-size: cover;
+    background-position: center center;
+    transform: scale(1.05);
+    will-change: transform;
+    transition: opacity 0.5s ease;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    opacity: 0; /* Start hidden, fade in when loaded */
   }
   
-  .scrollbar-thumb {
+  .background-overlay {
     position: absolute;
-    width: 6px;
-    background-color: var(--scrollbar-thumb);
-    border-radius: 3px;
-    transition: opacity var(--transition-speed) ease;
-    opacity: 0;
-    will-change: transform, opacity;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-overlay);
+    transition: background-color var(--transition-speed) ease;
+    will-change: background-color;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   
-  .scrollbar-thumb:hover {
-    opacity: 0.8 !important;
-    background-color: var(--scrollbar-thumb-hover);
-  }
-  
-  /* ---- Optimized Parallax Structure ---- */
+  /* ---- Parallax Wrapper with Improved Scrolling ---- */
   .parallax-wrapper {
-    height: 100vh;
-    width: 100vw;
-    perspective: 2px;
+    height: 100%;
+    width: 100%;
+    perspective: 1px;
     overflow-x: hidden;
     overflow-y: auto;
     position: relative;
@@ -139,63 +147,27 @@
     -webkit-overflow-scrolling: touch;
   }
   
-  /* Hide webkit scrollbar */
+  /* Hide standard scrollbar */
   .parallax-wrapper::-webkit-scrollbar {
     display: none;
     width: 0;
     background: transparent;
   }
   
-  .parallax-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    z-index: -1;
-    will-change: transform;
-  }
-  
-  /* Improved background performance */
-  .background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--bg-fallback-color);
-    background-image: url("../src/assets/SUNSETBACK.jpg");
-    background-size: cover;
-    background-position: center top;
-    background-repeat: repeat-y;
-    transform: translateZ(-2px) scale(2);
-    will-change: transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transition: opacity 0.5s ease;
-    opacity: 0.95; /* Slightly faded initial state */
-  }
-  
-  .background-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--background-overlay);
-    transition: background-color var(--transition-speed) ease;
-    z-index: -1;
-    will-change: background-color;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-  
   /* ---- Content Structure ---- */
+  .content-container {
+    position: relative;
+    width: 100%;
+    overflow: visible !important;
+    height: auto;
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+    will-change: transform;
+  }
+  
   .content {
     position: relative;
     z-index: 1;
-    transform-style: preserve-3d;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -203,6 +175,7 @@
     margin: 0 auto;
     padding-bottom: calc(var(--content-bottom-space) + 80px);
     min-height: calc(100vh - var(--content-bottom-space));
+    min-height: calc((var(--vh, 1vh) * 100) - var(--content-bottom-space));
     overflow-x: hidden;
     overflow-y: visible;
     mask-image: linear-gradient(to bottom, 
@@ -213,10 +186,10 @@
                                       black 0%,
                                       black 95%, 
                                       transparent 100%);
-    will-change: contents;
+    will-change: transform;
   }
   
-  /* Content mask for smooth fade effect */
+  /* Improved content mask for smooth fade effect */
   .content-mask {
     position: fixed;
     bottom: 0;
@@ -232,17 +205,7 @@
     will-change: opacity;
   }
   
-  /* Content container for better visibility */
-  .content-container {
-    position: relative;
-    width: 100%;
-    overflow: visible !important;
-    height: auto;
-    min-height: 100vh;
-    will-change: contents;
-  }
-  
-  /* ---- Typography ---- */
+  /* ---- Typography with Improved Rendering ---- */
   h1, h2, h3, p {
     color: var(--text-color);
     margin: 0;
@@ -261,34 +224,90 @@
   h1 {
     font-family: "Rubik", sans-serif;
     font-size: 32px;
+    font-weight: 700;
   }
   
   h2, h3 {
     font-size: 20px;
+    font-weight: 600;
   }
   
   p {
     font-size: 16px;
     font-weight: 300;
+    line-height: 1.6;
   }
   
   .sectionTitle {
     margin-bottom: 30px;
+    position: relative;
   }
   
   .hover {
     cursor: pointer;
+    transition: transform 0.2s ease;
   }
   
-  /* ---- Handle photo gallery content ---- */
-  .photo-gallery-container .content,
-  .photography-portfolio .content,
-  [class*="gallery"] .content,
-  [class*="portfolio"] .content {
-    padding-bottom: calc(var(--content-bottom-space) + 150px) !important;
+  /* ---- Enhanced Custom Scrollbar ---- */
+  .custom-scrollbar {
+    position: fixed;
+    top: 0;
+    right: 8px;
+    width: 8px;
+    height: 100%;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0.6;
   }
   
-  /* ---- Ensure all interactive elements are visible ---- */
+  .scrollbar-track {
+    position: absolute;
+    top: 2%;
+    right: 0;
+    width: 6px;
+    height: 96%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thumb {
+    position: absolute;
+    width: 6px;
+    background-color: var(--scrollbar-thumb);
+    border-radius: 3px;
+    transition: opacity var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  
+  .scrollbar-thumb:hover {
+    opacity: 0.8 !important;
+    background-color: var(--scrollbar-thumb-hover);
+  }
+  
+  /* ---- Scroll Limiting ---- */
+  .scroll-limiter {
+    height: var(--content-bottom-space);
+    margin-bottom: 0;
+    margin-top: auto;
+    pointer-events: none;
+    display: block;
+    width: 100%;
+    position: relative;
+    scroll-snap-align: end;
+  }
+  
+  .scroll-boundary {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  
+  /* ---- Interactive Elements ---- */
   .project-card,
   .gallery-item,
   .photo-item,
@@ -306,7 +325,6 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   
-  /* Add subtle hover effect to interactive elements */
   .project-card:hover,
   .gallery-item:hover,
   .photo-item:hover,
@@ -317,48 +335,11 @@
   [role="button"]:hover,
   .clickable:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  }
-  
-  /* ---- Scroll Limiting ---- */
-  .scroll-limiter {
-    height: var(--content-bottom-space);
-    margin-bottom: 0;
-    margin-top: auto;
-    pointer-events: none;
-    display: block;
-    width: 100%;
-    position: relative;
-    scroll-snap-align: end;
-  }
-  
-  /* Hard scroll stop */
-  .scroll-boundary {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    visibility: hidden;
-    pointer-events: none;
-  }
-  
-  /* ---- Container and Layout ---- */
-  .container, section.container, .content {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-  }
-  
-  .header {
-    padding-top: 1.5rem !important;
+    box-shadow: var(--shadow-light);
   }
   
   /* ---- Responsive Adjustments ---- */
   @media (min-width: 800px) {
-    #root {
-      gap: 100px;
-    }
-    
     h1 {
       font-size: 40px;
     }
@@ -375,11 +356,9 @@
       margin-bottom: 60px;
     }
     
-    /* Improved desktop parallax effect */
+    /* Smoother desktop parallax */
     .background {
-      transform: translateZ(-2px) scale(2);
-      background-position: center top;
-      background-size: cover;
+      transform: scale(1.1);
     }
     
     .content-mask {
@@ -388,10 +367,6 @@
   }
   
   @media (min-width: 1400px) {
-    #root {
-      gap: 200px;
-    }
-    
     h1 {
       font-size: 48px;
     }
@@ -402,23 +377,15 @@
     
     /* Enhanced large screen parallax */
     .background {
-      transform: translateZ(-2.5px) scale(2.25);
+      transform: scale(1.15);
     }
   }
   
+  /* ---- Mobile Optimizations ---- */
   @media (max-width: 768px) {
-    /* Optimized mobile parallax effect */
     .background {
       background-size: 200% auto;
-      transform: translateZ(-1px) scale(1.5);
-      height: 500vh; /* Much taller background */
-      background-repeat: repeat;
       background-position: center top;
-      will-change: transform;
-    }
-    
-    .background-overlay {
-      height: 500vh !important; /* Match background height */
     }
     
     :root {
@@ -433,100 +400,109 @@
     .parallax-wrapper {
       -webkit-overflow-scrolling: touch;
     }
+    
+    /* Better text rendering on mobile */
+    h1, h2, h3, p {
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Adjust content container for mobile */
+    .content-container {
+      min-height: calc(var(--vh, 1vh) * 100);
+    }
+    
+    .content {
+      min-height: calc((var(--vh, 1vh) * 100) - var(--content-bottom-space));
+    }
   }
   
-  /* Further optimize for small mobile screens */
+  /* ---- Small Screen Optimizations ---- */
   @media (max-width: 576px) {
     .background {
       background-size: 250% auto;
-      transform: translateZ(-1px) scale(1.4);
+    }
+    
+    h1 {
+      font-size: 28px;
+    }
+    
+    h2, h3 {
+      font-size: 18px;
+    }
+    
+    p {
+      font-size: 15px;
     }
   }
   
   @media (max-width: 375px) {
     .background {
       background-size: 300% auto;
-      transform: translateZ(-1px) scale(1.3);
     }
   }
   
-  /* ---- Device Orientation ---- */
+  /* ---- Device Orientation Handling ---- */
   @media (orientation: portrait) {
     .background {
-      background-position: center top !important;
+      background-position: center 25% !important;
     }
   }
   
-  @media (orientation: landscape) {
+  @media (orientation: landscape) and (max-width: 1024px) {
     .background {
-      background-position: center center !important;
-      background-size: cover !important;
-      transform: translateZ(-1.5px) scale(1.75);
+      background-position: center 40% !important;
+      background-size: 140% auto !important;
     }
   }
   
   /* ---- iOS Specific Fixes ---- */
-  @supports (-webkit-touch-callout: none) {
-    .parallax-bg,
-    .background,
-    .background-overlay {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100vw !important;
-      -webkit-transform-style: preserve-3d;
-      -webkit-backface-visibility: hidden;
-    }
-    
-    .background {
-      transform-origin: top center !important;
-      min-height: var(--ios-bg-height) !important;
-      height: var(--ios-bg-height) !important; /* Explicit height */
-      transform: translateZ(0) scale(1.5) !important; /* Force hardware acceleration */
-      -webkit-perspective: 1000;
-      -webkit-transform: translateZ(0) scale(1.5) !important;
-    }
-    
-    .background-overlay {
-      min-height: var(--ios-bg-height) !important;
-      height: var(--ios-bg-height) !important; /* Explicit height */
-      -webkit-perspective: 1000;
-    }
-    
-    .parallax-wrapper {
-      -webkit-overflow-scrolling: touch;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    
-    /* Fix iOS dark mode overlay */
-    [data-theme="dark"] .background-overlay {
-      background-color: rgba(0, 0, 0, 0.5) !important;
-      opacity: 1 !important;
-      height: 800vh !important; /* Extra height for dark mode */
-      min-height: 800vh !important;
-    }
-    
-    /* Extra insurance for iOS dark mode */
-    [data-theme="dark"] .parallax-bg::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 800vh;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: -1;
-      pointer-events: none;
-    }
+  .ios-device .parallax-bg,
+  .ios-device .background,
+  .ios-device .background-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    -webkit-transform-style: flat;
+    -webkit-backface-visibility: hidden;
+    transform-style: flat;
   }
   
-  /* Dark mode transition improvements */
+  .ios-device .background {
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    height: 200% !important;
+    min-height: 200% !important;
+    background-attachment: scroll;
+    background-size: cover !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .ios-device .background-overlay {
+    height: 200% !important;
+    min-height: 200% !important;
+  }
+  
+  .ios-device .parallax-wrapper {
+    -webkit-overflow-scrolling: touch;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+  }
+  
+  .ios-device [data-theme="dark"] .background-overlay {
+    background-color: rgba(0, 0, 0, 0.65) !important;
+    opacity: 1 !important;
+    height: 300% !important;
+    min-height: 300% !important;
+  }
+  
+  /* ---- Theme Transition Improvements ---- */
   [data-theme="dark"] .background {
-    filter: brightness(0.85);
+    filter: brightness(0.85) saturate(0.9);
     transition: filter var(--transition-speed) ease;
   }
   
@@ -534,17 +510,99 @@
     opacity: 1;
     transition: opacity var(--transition-speed) ease, 
                 background-color var(--transition-speed) ease;
-    height: 600vh !important; /* Ensure dark mode overlay extends far beyond visible content */
-    min-height: 600vh !important;
   }
   
-  /* Animation for theme toggle */
+  /* Smooth theme transition animation */
   @keyframes fadeTheme {
     0% { opacity: 0.8; }
     100% { opacity: 1; }
   }
   
+  /* ---- Special State Handling ---- */
+  .content-loading {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  
+  .content-loaded {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
+  /* ---- Handle photo galleries specifically ---- */
+  .photo-gallery-container .content,
+  .photography-portfolio .content,
+  [class*="gallery"] .content,
+  [class*="portfolio"] .content {
+    padding-bottom: calc(var(--content-bottom-space) + 150px) !important;
+  }
+  
+  /* Improve layout for gallery views */
+  @supports (display: grid) {
+    .gallery-grid,
+    .photo-grid,
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      width: 100%;
+    }
+    
+    @media (max-width: 600px) {
+      .gallery-grid,
+      .photo-grid,
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+    }
+    
+    @media (min-width: 1200px) {
+      .gallery-grid,
+      .photo-grid,
+      .portfolio-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+      }
+    }
+  }
+  
+  /* ---- Performance Optimizations ---- */
+  @supports (content-visibility: auto) {
+    .defer-render {
+      content-visibility: auto;
+      contain-intrinsic-size: 0 500px;
+    }
+    
+    .portfolio-item,
+    .project-section,
+    .photo-item {
+      content-visibility: auto;
+      contain-intrinsic-size: 0 300px;
+    }
+  }
+  
+  /* Add contain property for better paint performance */
   .background,
-  .background-overlay {
-    animation: fadeTheme 0.5s ease forwards;
+  .background-overlay,
+  .parallax-bg,
+  .content,
+  .content-container {
+    contain: paint;
+  }
+  
+  /* ---- Animation Optimizations ---- */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    .background,
+    .background-overlay {
+      transition: none !important;
+    }
   }

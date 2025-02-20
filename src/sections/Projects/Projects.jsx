@@ -10,6 +10,8 @@ import projectImage2 from "../../assets/photographyicon.jpg";
 
 import eInk1 from "./Project Photos/E-ink 1.jpg";
 import eInk2 from "./Project Photos/E-ink 2.jpg";
+import plotter1 from "./Project Photos/PenPlotter1.jpg";
+import plotter2 from "./Project Photos/PenPlotter2.jpg";
 // Import additional project images as needed
 
 // ProjectSection component for individual project display
@@ -327,50 +329,23 @@ function Projects() {
     },
     {
       id: 3,
-      title: "Financial Analysis Tool",
-      description: "A comprehensive financial analysis tool that helps users understand their spending patterns and optimize their budgets.",
-      category: "Finance",
+      title: "Python pen-plotter art",
+      description: "Made using custom made generative python code that exports into SVG file. Includes 52000 individual dots.",
+      category: "Art",
       images: [
         { 
-          src: projectImage1,
-          alt: "Financial dashboard", 
-          caption: "Main analytics dashboard"
-        }
+          src: plotter1,
+          alt: "Art", 
+          caption: "Finished product"
+        },
+        { 
+            src: plotter2,
+            alt: "Financial dashboard", 
+            caption: "Finished product"
+          }
       ],
-      details: [
-        "Built data visualization components for expense tracking",
-        "Implemented predictive algorithms for future spending forecasts",
-        "Created custom budget optimization suggestions",
-        "Integrated with major banking APIs for automatic transaction imports"
-      ],
-      technologies: ["React", "D3.js", "Node.js", "Firebase", "Plaid API"],
-      links: [
-        { text: "Live Demo", url: "https://finance-tool.example.com" }
-      ]
+      technologies: ["Python"],
     },
-    {
-      id: 4,
-      title: "Smart Home Energy Optimizer",
-      description: "An IoT system that monitors and optimizes home energy usage, reducing electricity costs while maintaining comfort.",
-      category: "IoT",
-      images: [
-        { 
-          src: projectImage2,
-          alt: "Smart home dashboard", 
-          caption: "Energy monitoring interface"
-        }
-      ],
-      details: [
-        "Designed custom PCB for power monitoring",
-        "Implemented machine learning algorithms to predict optimal settings",
-        "Created mobile app for remote monitoring and control",
-        "Reduced average household energy consumption by 22%"
-      ],
-      technologies: ["Raspberry Pi", "TensorFlow", "React Native", "MQTT", "C++"],
-      links: [
-        { text: "Project Overview", url: "https://example.com/smart-home" }
-      ]
-    }
   ];
 
   return (

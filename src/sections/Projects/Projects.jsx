@@ -313,30 +313,16 @@ function Projects() {
     {
       id: 2,
       title: "Simple energy monitoring system",
-      description: "",
+      description: "Followed principles of systematic program design to develop a solution to energy bill monitoring",
       category: "Computer Science",
-      images: [
-        { 
-          src: projectImage2,
-          alt: "Chemical art installation", 
-          caption: "Complete installation at the Science Museum"
-        },
-        { 
-          src: projectImage1,
-          alt: "Chemical reaction closeup",
-          caption: "Detailed view of the primary reaction chamber" 
-        },
-      ],
       details: [
-        "Designed a safe, controlled environment for demonstrating acid-base reactions",
-        "Created custom illumination system to highlight color changes",
-        "Developed motion sensors that trigger different chemical combinations",
-        "Collaborated with chemistry department on sustainable materials"
+        "Capable of adding arbitrary number of rooms, and devices within those rooms, each with an energy consumption.",
+        "Forecasts energy usage, and cost for periods based off of input energy cost.",
+        "Capable of saving and loading configurations using jSON.",
       ],
       technologies: ["Java"],
       links: [
-        { text: "Gallery", url: "https://example.com/chemical-art" },
-        { text: "Process Documentation", url: "https://example.com/process" }
+        { text: "GitHub", url: "https://github.com/lsbarro/Energy-Monitor" }
       ]
     },
     {

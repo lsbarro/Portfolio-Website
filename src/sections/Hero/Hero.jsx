@@ -36,7 +36,7 @@ function Hero() {
         </div>
         
         <p className={styles.description}>
-        I'm a second-year student at UBC interested in studying Mathematics, with a passion for Technology and Finance, particularly focused on developing solutions that enhance and optimize everyday life.
+        I'm a second-year prospective Mathematics student at UBC, with a passion for Technology and Finance. I'm particularly interested in developing solutions that enhance and optimize everyday life.
         </p>
         
         <div className={styles.actions}>

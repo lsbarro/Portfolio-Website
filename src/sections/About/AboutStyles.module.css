@@ -1,0 +1,247 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  .header {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-top: 2rem;
+  }
+  
+  .backButton {
+    position: absolute;
+    left: 0;
+    top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    padding: 10px 16px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .backButton svg {
+    transition: transform 0.3s ease;
+  }
+  
+  .backButton:hover {
+    background-color: var(--btn-color);
+    color: var(--btn-text-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(9, 135, 242, 0.2);
+  }
+  
+  .backButton:hover svg {
+    transform: translateX(-3px);
+  }
+  
+  .sectionTitle {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    color: var(--btn-text-color);
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .sectionTitle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -12px;
+    width: 60px;
+    height: 3px;
+    background-color: var(--btn-color);
+    transform: translateX(-50%);
+  }
+  
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: rgba(20, 20, 20, 0.75);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+  
+  :global([data-theme="light"]) .content {
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .photoContainer {
+    flex: 0 0 auto;
+    position: relative;
+  }
+  
+  .photoWrapper {
+    width: 400px;
+    height: 500px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .photoWrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  .photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .photoWrapper:hover .photo {
+    transform: scale(1.05);
+  }
+  
+  .textContent {
+    flex: 1;
+    max-width: 600px;
+  }
+  
+  .textWrapper {
+    padding: 2rem;
+  }
+  
+  .welcomeText {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    position: relative;
+    display: inline-block;
+  }
+  
+  .welcomeText::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 40px;
+    height: 3px;
+    background-color: var(--btn-color);
+  }
+  
+  .description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+  
+  .description:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1200px) {
+    .content {
+      gap: 3rem;
+      padding: 1.5rem;
+    }
+  
+    .photoWrapper {
+      width: 350px;
+      height: 450px;
+    }
+  
+    .textWrapper {
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    .photoWrapper {
+      width: 300px;
+      height: 400px;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .content {
+      flex-direction: column;
+      gap: 2rem;
+      padding: 1.5rem;
+    }
+  
+    .photoWrapper {
+      width: 280px;
+      height: 350px;
+    }
+  
+    .textContent {
+      max-width: 100%;
+    }
+  
+    .textWrapper {
+      padding: 1rem;
+    }
+  
+    .welcomeText {
+      font-size: 1.75rem;
+    }
+  
+    .description {
+      font-size: 1rem;
+    }
+  
+    .backButton {
+      position: relative;
+      top: 0;
+      left: 0;
+      align-self: flex-start;
+      margin-bottom: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .photoWrapper {
+      width: 100%;
+      height: 300px;
+    }
+  
+    .content {
+      padding: 1rem;
+    }
+  
+    .sectionTitle {
+      font-size: 2rem;
+    }
+  
+    .welcomeText {
+      font-size: 1.5rem;
+    }
+  }

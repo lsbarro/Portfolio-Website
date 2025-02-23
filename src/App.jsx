@@ -11,6 +11,7 @@ import Hero from "./sections/Hero/Hero";
 import Portfolio from "./sections/Portfolio/Portfolio";
 import PhotographyPortfolio from "./sections/Photography/PhotographyPortfolio";
 import Projects from "./sections/Projects/Projects";
+import About from "./sections/About/About";
 
 // Improved parallax content component with optimized performance
 const ParallaxContent = () => {
@@ -265,6 +266,7 @@ const ParallaxContent = () => {
             />
             <Route path="/photography" element={<PhotographyPortfolio />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </div>
         <div className="scroll-limiter"></div>

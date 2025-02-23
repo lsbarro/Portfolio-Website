@@ -2,6 +2,7 @@ import styles from "./PortfolioStyles.module.css";
 import ProjectCard from "../../common/ProjectCard";
 import photographyIcon from '../../assets/photographyicon.jpg';
 import projectsIcon from '../../assets/projectsicon.jpeg';
+import aboutIcon from '../../assets/About.jpg';
 
 function Portfolio() {
   const projects = [
@@ -9,7 +10,7 @@ function Portfolio() {
       id: 1,
       title: "About me",
       description: "My name, interests. ",
-      image: projectsIcon,
+      image: aboutIcon,
       link: "/about",
       isExternal: false
     },

@@ -77,7 +77,7 @@
   
   .content {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     gap: 4rem;
     max-width: 1200px;
@@ -96,14 +96,19 @@
   }
   
   .photoContainer {
-    flex: 0 0 auto;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    gap: 2rem;
   }
   
   .photoWrapper {
-    width: 400px;
-    height: 500px;
+    width: 100%;
+    aspect-ratio: 3/4;
+    background-color: rgba(30, 30, 30, 0.4);
+    backdrop-filter: blur(8px);
     border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     overflow: hidden;
     position: relative;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -126,13 +131,33 @@
     transform: scale(1.05);
   }
   
+  .portfolioContainer {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* This will style the ProjectCard consistently with the photo */
+  .portfolioContainer > div {
+    width: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    aspect-ratio: 16/9;
+  }
+  
+  .portfolioContainer > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+  
   .textContent {
     flex: 1;
-    max-width: 600px;
+    width: 60%;
   }
   
   .textWrapper {
-    padding: 2rem;
+    padding: 1rem 0;
   }
   
   .welcomeText {
@@ -170,23 +195,6 @@
   @media (max-width: 1200px) {
     .content {
       gap: 3rem;
-      padding: 1.5rem;
-    }
-  
-    .photoWrapper {
-      width: 350px;
-      height: 450px;
-    }
-  
-    .textWrapper {
-      padding: 1.5rem;
-    }
-  }
-  
-  @media (max-width: 1024px) {
-    .photoWrapper {
-      width: 300px;
-      height: 400px;
     }
   }
   
@@ -194,30 +202,25 @@
     .content {
       flex-direction: column;
       gap: 2rem;
-      padding: 1.5rem;
     }
-  
-    .photoWrapper {
-      width: 280px;
-      height: 350px;
+    
+    .photoContainer {
+      width: 100%;
+      max-width: 500px;
     }
-  
+    
     .textContent {
-      max-width: 100%;
+      width: 100%;
     }
-  
-    .textWrapper {
-      padding: 1rem;
-    }
-  
+    
     .welcomeText {
       font-size: 1.75rem;
     }
-  
+    
     .description {
       font-size: 1rem;
     }
-  
+    
     .backButton {
       position: relative;
       top: 0;
@@ -228,20 +231,25 @@
   }
   
   @media (max-width: 480px) {
-    .photoWrapper {
-      width: 100%;
-      height: 300px;
-    }
-  
     .content {
       padding: 1rem;
     }
-  
+    
     .sectionTitle {
       font-size: 2rem;
     }
-  
+    
     .welcomeText {
       font-size: 1.5rem;
+    }
+    
+    .photoContainer {
+      max-width: 100%;
+    }
+  }
+  
+  @media (max-width: 320px) {
+    .container {
+      padding: 3rem 0.5rem;
     }
   }

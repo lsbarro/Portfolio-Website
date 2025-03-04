@@ -3,8 +3,21 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './AboutStyles.module.css';
 import aboutPhoto from '../../assets/About.jpg';
+import photographyIcon from '../../assets/photographyicon.jpg';
+import ProjectCard from "../../common/ProjectCard";
 
 function About() {
+    const projects = [
+        {
+          id: 2,
+          title: "Photography Portfolio",
+          description: "A collection of photos I'm proud of.",
+          image: photographyIcon,
+          link: "/photography",
+          isExternal: false
+        },
+      ];
+
   return (
     <section className={styles.container}>
       <div className={styles.header}>
@@ -32,6 +45,18 @@ function About() {
           <div className={styles.photoWrapper}>
             <img src={aboutPhoto} alt="Liam Sbarro" className={styles.photo} />
           </div>
+          <div className={styles.portfolioContainer}>
+        {projects.map(project => (
+          <ProjectCard 
+            key={project.id}
+            title={project.title}
+            description={project.description}
+            image={project.image}
+            link={project.link}
+            isExternal={project.isExternal}
+          />
+        ))}
+      </div>
         </div>
         
         <div className={styles.textContent}>

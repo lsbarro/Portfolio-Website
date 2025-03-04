@@ -1,6 +1,5 @@
 import styles from "./PortfolioStyles.module.css";
 import ProjectCard from "../../common/ProjectCard";
-import photographyIcon from '../../assets/photographyicon.jpg';
 import projectsIcon from '../../assets/projectsicon.jpeg';
 import aboutIcon from '../../assets/About.jpg';
 
@@ -12,14 +11,6 @@ function Portfolio() {
       description: "My name, interests. ",
       image: aboutIcon,
       link: "/about",
-      isExternal: false
-    },
-    {
-      id: 2,
-      title: "Photography Portfolio",
-      description: "A collection of photos I'm proud of.",
-      image: photographyIcon,
-      link: "/photography",
       isExternal: false
     },
     {

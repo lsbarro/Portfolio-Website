@@ -51,10 +51,6 @@ function Hero() {
               <img src={linkedinIcon} alt="LinkedIn" />
             </a>
           </div>
-          
-          <a href={CV} download className={styles.resumeLink}>
-            <button className={styles.resumeButton}>Resume</button>
-          </a>
         </div>
       </div>
     </section>

@@ -64,7 +64,7 @@ function About() {
             <h3 className={styles.welcomeText}>Hello, I'm Liam</h3>
             <p className={styles.description}>
 
-I'm a student at UBC, where I am a prospective major in Mathematics. I currently live in Vancouver, BC, where I love to take advantage of the mountains and snowboard/mountain bike, or work on random projects and take photos in my free time! 
+I'm a student at UBC, where I am a Computer Science major. I currently live in Vancouver, BC, where I love to take advantage of the mountains and snowboard/mountain bike, or work on random projects and take photos in my free time! 
             </p>
             <p className={styles.description}>
             I love learning new things, am a sound engineering/audio enthusiast, and enjoy cooking, playing video games, and building electronics.

@@ -14,39 +14,80 @@
 .profileSection {
   display: flex;
   justify-content: center;
+  align-items: center;
+  position: relative;
   width: 100%;
 }
 
-.colorModeContainer {
-  position: relative;
-  width: 220px;
-  height: 220px;
+.profileImageContainer {
+  width: 280px;
+  height: 280px;
   border-radius: 50%;
-  background: var(--profile-bg, white);
+  background: transparent;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-  cursor: pointer;
-  border: none;
-  padding: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
 }
 
-.colorModeContainer:hover {
+.profileImageContainer:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
+.colorModeContainer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  background: none !important;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  padding: 0;
+  outline: none;
+  box-shadow: none;
+}
+
+.colorModeContainer:hover {
+  transform: scale(1.2);
+  background: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
 .colorModeContainer:active {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: scale(0.9);
+  background: none !important;
 }
 
-:global([data-theme="dark"]) .colorModeContainer {
-  background: var(--profile-bg-dark, #333);
+.colorModeContainer:focus {
+  background: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-:global([data-theme="light"]) .colorModeContainer {
-  background: var(--profile-bg-light, white);
+.themeIcon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+:global([data-theme="dark"]) .themeIcon {
+  filter: brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
+}
+
+:global([data-theme="light"]) .themeIcon {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+}
+
+.colorModeContainer:hover .themeIcon {
+  transform: rotate(180deg);
 }
 
 .hero {
@@ -133,6 +174,34 @@
   width: 100%;
 }
 
+.cvButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--btn-color);
+  color: var(--btn-text-color);
+  text-decoration: none;
+  border-radius: 24px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  margin-top: 1rem;
+}
+
+.cvButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(9, 135, 242, 0.3);
+  background: var(--btn-hover-color, #1976d2);
+}
+
+.cvButton:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(9, 135, 242, 0.2);
+}
+
 .socialLinks {
   display: flex;
   gap: 1.5rem;
@@ -197,6 +266,7 @@
   .container {
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     gap: 3rem;
     padding: 2rem;
   }
@@ -206,7 +276,7 @@
     justify-content: flex-start;
   }
 
-  .colorModeContainer {
+  .profileImageContainer {
     width: 250px;
     height: 250px;
   }
@@ -248,10 +318,10 @@
 @media (min-width: 1200px) {
   .container {
     padding: 3rem;
-    gap: 5rem;
+    gap: 4rem;
   }
 
-  .colorModeContainer {
+  .profileImageContainer {
     width: 300px;
     height: 300px;
   }

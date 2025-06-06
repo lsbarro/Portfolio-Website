@@ -1,11 +1,12 @@
 import React from "react";
+import styles from "./SkillListStyles.module.css";
 
 function SkillList({ src, skill }) {
   return (
-    <span>
-      <img src={src} alt="CHeckmark icon" />
-      <p>skill</p>
-    </span>
+    <div className={styles.skillItem}>
+      <img src={src} alt="Checkmark icon" className={styles.icon} />
+      <span className={styles.skillText}>{skill}</span>
+    </div>
   );
 }
 

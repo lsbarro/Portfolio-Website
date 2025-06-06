@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./PhotographyPortfolioStyles.module.css";
+import BackButton from "../../common/BackButton";
 import { useTheme } from "../../common/ThemeContext";
 // Import your photos
 import adaptiveSports1 from "./PhotoAssets/AdaptiveSports1.jpeg";
@@ -323,48 +324,37 @@ function PhotographyPortfolio() {
 
   // Add event listener for keyboard navigation
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    if (selectedPhoto) {
+      window.addEventListener("keydown", handleKeyDown);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [selectedPhoto]);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [selectedPhoto, handleKeyDown]);
 
   // Cleanup function on unmount
   useEffect(() => {
     return () => {
       // If component unmounts with modal open, restore body
-      if (selectedPhoto) {
+      if (selectedPhoto && bodyStylesRef.current) {
         const body = document.body;
-        body.style.position = bodyStylesRef.current.position;
-        body.style.top = bodyStylesRef.current.top;
-        body.style.left = bodyStylesRef.current.left;
-        body.style.right = bodyStylesRef.current.right;
-        body.style.overflow = bodyStylesRef.current.overflow;
-        window.scrollTo(0, scrollYRef.current);
+        body.style.position = bodyStylesRef.current.position || '';
+        body.style.top = bodyStylesRef.current.top || '';
+        body.style.left = bodyStylesRef.current.left || '';
+        body.style.right = bodyStylesRef.current.right || '';
+        body.style.overflow = bodyStylesRef.current.overflow || '';
+        if (scrollYRef.current !== undefined) {
+          window.scrollTo(0, scrollYRef.current);
+        }
       }
     };
-  }, [selectedPhoto]);
+  }, []);
 
   return (
     <section className={styles.container}>
       <div className={styles.header}>
-        <Link to="/" className={styles.backButton}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-          <span>Back to Home</span>
-        </Link>
+        <BackButton />
         <h2 className={styles.sectionTitle}>Photography Portfolio</h2>
       </div>
 

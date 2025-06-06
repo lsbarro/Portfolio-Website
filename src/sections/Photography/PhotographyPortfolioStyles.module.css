@@ -15,48 +15,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 2rem;
-    position: relative;
-    padding-top: 2rem; /* Add specific top padding here */
+    margin-bottom: 3rem;
+    padding-top: 6rem;
   }
   
-  .backButton {
-    position: absolute;
-    left: 0;
-    top: 2rem; /* Align with header padding */
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text-color);
-    text-decoration: none;
-    font-weight: 500;
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    padding: 10px 16px;
-    border-radius: 30px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  .backButton svg {
-    transition: transform 0.3s ease;
-  }
-  
-  .backButton:hover {
-    background-color: var(--btn-color);
-    color: var(--btn-text-color);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(9, 135, 242, 0.2);
-  }
-  
-  .backButton:hover svg {
-    transform: translateX(-3px);
-  }
-  
-  .backButton:active {
-    transform: translateY(0);
-    box-shadow: 0 4px 8px rgba(9, 135, 242, 0.15);
-  }
   
   .sectionTitle {
     font-size: 2rem;

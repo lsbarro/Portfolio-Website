@@ -13,6 +13,7 @@ export const ThemeProvider = ({ children }) => {
     const updateBackgroundForTheme = useCallback((newTheme) => {
         const root = document.documentElement;
         const isDarkMode = newTheme === 'dark';
+        let transitionTimeoutRef = null;
         
         // Update document attribute first
         root.setAttribute('data-theme', newTheme);
@@ -78,18 +79,30 @@ export const ThemeProvider = ({ children }) => {
             }
             
             // Remove transition class after animation completes
-            setTimeout(() => {
+            if (transitionTimeoutRef) clearTimeout(transitionTimeoutRef);
+            transitionTimeoutRef = setTimeout(() => {
                 document.body.classList.remove('theme-transition');
             }, 500);
         }
+        
+        // Return cleanup function
+        return () => {
+            if (transitionTimeoutRef) {
+                clearTimeout(transitionTimeoutRef);
+                transitionTimeoutRef = null;
+            }
+        };
     }, []);
 
     useEffect(() => {
         // Apply theme on initial render
-        updateBackgroundForTheme(theme);
+        const cleanup = updateBackgroundForTheme(theme);
         
         // Store theme in localStorage for persistence
         localStorage.setItem('theme', theme);
+        
+        // Return cleanup function
+        return cleanup;
     }, [theme, updateBackgroundForTheme]);
 
     const toggleTheme = () => { 

@@ -7,6 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { ThemeProvider } from "./common/ThemeContext";
+import ErrorBoundary from "./common/ErrorBoundary";
 import Hero from "./sections/Hero/Hero";
 import Portfolio from "./sections/Portfolio/Portfolio";
 import PhotographyPortfolio from "./sections/Photography/PhotographyPortfolio";
@@ -18,6 +19,8 @@ const ParallaxContent = () => {
   const location = useLocation();
   const wrapperRef = useRef(null);
   const contentRef = useRef(null);
+  const backgroundRef = useRef(null);
+  const overlayRef = useRef(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [viewportWidth, setViewportWidth] = useState(0);
@@ -70,8 +73,9 @@ const ParallaxContent = () => {
             setScrollProgress(progress);
             
             // Apply parallax effect directly to background
-            const background = document.querySelector('.parallax-bg');
+            const background = backgroundRef.current || document.querySelector('.parallax-bg');
             if (background) {
+              backgroundRef.current = background;
               // Different parallax rate based on route
               const parallaxRate = location.pathname === '/projects' ? 0.4 : 0.5;
               const translateY = scrollTop * parallaxRate;
@@ -99,10 +103,14 @@ const ParallaxContent = () => {
   useEffect(() => {
     // Apply route-specific background adjustments
     const applyRouteSpecificStyles = () => {
-      const background = document.querySelector('.background');
-      const overlay = document.querySelector('.background-overlay');
+      const background = backgroundRef.current || document.querySelector('.background');
+      const overlay = overlayRef.current || document.querySelector('.background-overlay');
       
       if (!background || !overlay) return;
+      
+      // Cache refs for future use
+      if (!backgroundRef.current) backgroundRef.current = background;
+      if (!overlayRef.current) overlayRef.current = overlay;
       
       // Common properties
       background.style.transition = 'opacity 0.5s ease';
@@ -131,9 +139,10 @@ const ParallaxContent = () => {
   useEffect(() => {
     const handleThemeChange = () => {
       const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
-      const overlay = document.querySelector('.background-overlay');
+      const overlay = overlayRef.current || document.querySelector('.background-overlay');
       
       if (overlay) {
+        overlayRef.current = overlay;
         overlay.style.backgroundColor = isDarkMode 
           ? 'rgba(0, 0, 0, 0.65)' 
           : 'rgba(0, 0, 0, 0.35)';
@@ -156,11 +165,15 @@ const ParallaxContent = () => {
     // Initial call
     handleThemeChange();
     
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   // Create custom scrollbar
   useEffect(() => {
+    let fadeTimeoutRef = null;
+    
     const createScrollbar = () => {
       const existingScrollbar = document.querySelector('.custom-scrollbar');
       if (existingScrollbar) {
@@ -196,9 +209,9 @@ const ParallaxContent = () => {
       thumb.style.top = `${position}px`;
       thumb.style.opacity = '0.6';
       
-      clearTimeout(thumb.fadeTimeout);
-      thumb.fadeTimeout = setTimeout(() => {
-        thumb.style.opacity = '0';
+      if (fadeTimeoutRef) clearTimeout(fadeTimeoutRef);
+      fadeTimeoutRef = setTimeout(() => {
+        if (thumb) thumb.style.opacity = '0';
       }, 1500);
     };
     
@@ -210,9 +223,9 @@ const ParallaxContent = () => {
       if (thumb) {
         thumb.style.opacity = '0.6';
         
-        clearTimeout(thumb.fadeTimeout);
-        thumb.fadeTimeout = setTimeout(() => {
-          thumb.style.opacity = '0';
+        if (fadeTimeoutRef) clearTimeout(fadeTimeoutRef);
+        fadeTimeoutRef = setTimeout(() => {
+          if (thumb) thumb.style.opacity = '0';
         }, 1500);
       }
     };
@@ -221,7 +234,10 @@ const ParallaxContent = () => {
     
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
-      if (thumb) clearTimeout(thumb.fadeTimeout);
+      if (fadeTimeoutRef) {
+        clearTimeout(fadeTimeoutRef);
+        fadeTimeoutRef = null;
+      }
     };
   }, [scrollProgress, viewportHeight]);
 
@@ -254,20 +270,22 @@ const ParallaxContent = () => {
     <div className="parallax-wrapper" ref={wrapperRef}>
       <div className="content-container">
         <div className="content" ref={contentRef}>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <Hero />
-                  <Portfolio />
-                </>
-              }
-            />
-            <Route path="/photography" element={<PhotographyPortfolio />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
+          <ErrorBoundary>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <Hero />
+                    <Portfolio />
+                  </>
+                }
+              />
+              <Route path="/photography" element={<PhotographyPortfolio />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </ErrorBoundary>
         </div>
         <div className="scroll-limiter"></div>
       </div>
@@ -309,6 +327,7 @@ function App() {
       // Preload image for smooth transition
       const img = new Image();
       const imgSrc = "../src/assets/SUNSETBACK.jpg";
+      let transformTimeoutRef = null;
       
       img.onload = () => {
         requestAnimationFrame(() => {
@@ -316,8 +335,8 @@ function App() {
           background.style.opacity = '1';
           
           // Force reflow to ensure background properly displays
-          setTimeout(() => {
-            background.style.transform = 'translateZ(0)';
+          transformTimeoutRef = setTimeout(() => {
+            if (background) background.style.transform = 'translateZ(0)';
           }, 100);
         });
       };
@@ -328,12 +347,20 @@ function App() {
       };
       
       img.src = imgSrc;
+      
+      // Return cleanup function
+      return () => {
+        if (transformTimeoutRef) {
+          clearTimeout(transformTimeoutRef);
+          transformTimeoutRef = null;
+        }
+      };
     };
     
-    setupBackground();
+    const backgroundCleanup = setupBackground();
     
     // Create consistent height for mobile devices and apply iOS fixes
-    const setupMobileHeight = () => {
+    let setupMobileHeight = () => {
       // Fix vh units on mobile
       const setTrueHeight = () => {
         const vh = window.innerHeight * 0.01;
@@ -357,15 +384,39 @@ function App() {
         }
         
         // Handle orientation changes specially for iOS
-        window.addEventListener('orientationchange', () => {
-          setTimeout(setTrueHeight, 200);
-        });
+        let orientationTimeoutRef = null;
+        const handleOrientationChange = () => {
+          if (orientationTimeoutRef) clearTimeout(orientationTimeoutRef);
+          orientationTimeoutRef = setTimeout(setTrueHeight, 200);
+        };
+        
+        window.addEventListener('orientationchange', handleOrientationChange);
+        
+        // Add cleanup for orientation listener
+        const originalCleanup = setupMobileHeight;
+        setupMobileHeight = () => {
+          window.removeEventListener('resize', setTrueHeight);
+          window.removeEventListener('orientationchange', handleOrientationChange);
+          if (orientationTimeoutRef) {
+            clearTimeout(orientationTimeoutRef);
+            orientationTimeoutRef = null;
+          }
+        };
       }
       
-      return () => window.removeEventListener('resize', setTrueHeight);
+      return () => {
+        window.removeEventListener('resize', setTrueHeight);
+      };
     };
     
-    setupMobileHeight();
+    const mobileCleanup = setupMobileHeight();
+    
+    // Return combined cleanup function
+    return () => {
+      if (backgroundCleanup) backgroundCleanup();
+      if (mobileCleanup) mobileCleanup();
+      if (setupMobileHeight) setupMobileHeight();
+    };
     
   }, [isIOS]);
 

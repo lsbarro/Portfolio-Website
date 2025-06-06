@@ -21,12 +21,15 @@ function Hero() {
   return (
     <section className={styles.container} style={{paddingTop: 0, marginTop: 0}}>
       <div className={styles.profileSection}>
+        <div className={styles.profileImageContainer}>
+          <img src={heroImg} alt="Liam Sbarro" className={styles.hero} />
+        </div>
         <button 
           onClick={toggleTheme}
           className={styles.colorModeContainer}
-          aria-label="Toggle dark mode"
+          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
         >
-          <img src={heroImg} alt="Liam Sbarro" className={styles.hero} />
+          <img src={themeIcon} alt="Theme toggle" className={styles.themeIcon} />
         </button>
       </div>
 
@@ -41,13 +44,13 @@ function Hero() {
         
         <div className={styles.actions}>
           <div className={styles.socialLinks}>
-            <a href="https://www.instagram.com/li.am2005/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <a href="https://www.instagram.com/li.am2005/" target="_blank" rel="noopener noreferrer" aria-label="Visit Liam's Instagram profile">
               <img src={instagramIcon} alt="Instagram" />
             </a>
-            <a href="https://github.com/lsbarro" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <a href="https://github.com/lsbarro" target="_blank" rel="noopener noreferrer" aria-label="Visit Liam's GitHub profile">
               <img src={githubIcon} alt="GitHub" />
             </a>
-            <a href="https://www.linkedin.com/in/liam-sbarro-8a2b19211/?originalSubdomain=ca" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/liam-sbarro-8a2b19211/?originalSubdomain=ca" target="_blank" rel="noopener noreferrer" aria-label="Visit Liam's LinkedIn profile">
               <img src={linkedinIcon} alt="LinkedIn" />
             </a>
           </div>

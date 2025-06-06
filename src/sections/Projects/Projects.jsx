@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import styles from "./ProjectsStyles.module.css";
+import BackButton from "../../common/BackButton";
 import { useTheme } from "../../common/ThemeContext";
 
 // Import placeholder project images
@@ -55,14 +56,16 @@ const ProjectSection = ({ project, viewMode = 'grid' }) => {
       }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
+      observer.disconnect();
     };
   }, []);
   
@@ -229,57 +232,6 @@ function Projects() {
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   
-  // Get all unique categories and technologies
-  const getProjectCategories = () => {
-    const categories = projects.map(project => project.category);
-    return ['all', ...new Set(categories)];
-  };
-  
-  const getAllTechnologies = () => {
-    const techLists = projects.map(project => project.technologies);
-    const allTechs = [].concat(...techLists);
-    return [...new Set(allTechs)];
-  };
-  
-  // Filter projects based on active filter
-  useEffect(() => {
-    const filterProjects = () => {
-      if (activeFilter === 'all') {
-        setFilteredProjects(projects);
-      } else {
-        const filtered = projects.filter(project => 
-          project.category === activeFilter || 
-          project.technologies.includes(activeFilter)
-        );
-        setFilteredProjects(filtered);
-      }
-    };
-    
-    filterProjects();
-    
-    // Add animation class after filter change
-    setIsLoaded(false);
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-      
-      // Scroll to projects container when filter changes
-      if (activeFilter !== 'all') {
-        const projectsContainer = document.querySelector(`.${styles.projectsContainer}`);
-        if (projectsContainer) {
-          setTimeout(() => {
-            projectsContainer.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'start',
-              inline: 'nearest'
-            });
-          }, 100);
-        }
-      }
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, [activeFilter]);
-  
   // Sample projects data
   // Replace with your actual projects
   const projects = [
@@ -347,33 +299,79 @@ function Projects() {
       technologies: ["Python"],
     },
   ];
+  
+  // Memoized project categories and technologies
+  const projectCategories = useMemo(() => {
+    const categories = projects.map(project => project.category);
+    return ['all', ...new Set(categories)];
+  }, [projects]);
+  
+  const allTechnologies = useMemo(() => {
+    const techLists = projects.map(project => project.technologies);
+    const allTechs = [].concat(...techLists);
+    return [...new Set(allTechs)];
+  }, [projects]);
+  
+  // Memoized filtered projects
+  const filteredProjectsList = useMemo(() => {
+    if (activeFilter === 'all') {
+      return projects;
+    } else {
+      return projects.filter(project => 
+        project.category === activeFilter || 
+        project.technologies.includes(activeFilter)
+      );
+    }
+  }, [activeFilter]);
+  
+  // Filter projects based on active filter
+  useEffect(() => {
+    const filterProjects = () => {
+      setFilteredProjects(filteredProjectsList);
+    };
+    
+    filterProjects();
+    
+    // Add animation class after filter change
+    setIsLoaded(false);
+    let loadTimer = null;
+    let scrollTimer = null;
+    
+    loadTimer = setTimeout(() => {
+      setIsLoaded(true);
+      
+      // Scroll to projects container when filter changes
+      if (activeFilter !== 'all') {
+        const projectsContainer = document.querySelector(`.${styles.projectsContainer}`);
+        if (projectsContainer) {
+          scrollTimer = setTimeout(() => {
+            projectsContainer.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start',
+              inline: 'nearest'
+            });
+          }, 100);
+        }
+      }
+    }, 100);
+    
+    return () => {
+      if (loadTimer) clearTimeout(loadTimer);
+      if (scrollTimer) clearTimeout(scrollTimer);
+    };
+  }, [activeFilter]);
 
   return (
     <section className={styles.container}>
       <div className={styles.header}>
-        <Link to="/" className={styles.backButton}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-          <span>Back to Home</span>
-        </Link>
+        <BackButton />
         <h2 className={styles.sectionTitle}>My Projects</h2>
       </div>
       
       <div className={styles.controlsContainer}>
         <div className={styles.filterControls}>
           <div className={styles.categoryFilters}>
-            {getProjectCategories().map(category => (
+            {projectCategories.map(category => (
               <button
                 key={category}
                 className={`${styles.filterButton} ${activeFilter === category ? styles.activeFilter : ''}`}
@@ -411,7 +409,7 @@ function Projects() {
         <div className={styles.techFilterContainer}>
           <h3 className={styles.techFilterTitle}>Filter by Technology</h3>
           <div className={styles.techFilters}>
-            {getAllTechnologies().map(tech => (
+            {allTechnologies.map(tech => (
               <button
                 key={tech}
                 className={`${styles.techFilterButton} ${activeFilter === tech ? styles.activeTechFilter : ''}`}

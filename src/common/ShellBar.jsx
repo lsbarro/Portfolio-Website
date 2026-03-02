@@ -23,23 +23,6 @@ const NEOFETCH_LOGO = `    /\\
  / /  \\ \\
 /_/    \\_\\`;
 
-const DELETE_LINES = [
-  "removing '/home/lsbarro/readme'",
-  "removing '/home/lsbarro/about/'",
-  "removing '/home/lsbarro/projects/'",
-  "removing '/home/lsbarro/photos/'",
-  "removing '/usr/lib/react/index.js'",
-  "removing '/usr/lib/react-dom/client.js'",
-  "removing '/var/www/lsbarro.dev/index.html'",
-  "removing '/var/www/lsbarro.dev/assets/'",
-  "removing '/etc/nginx/conf.d/portfolio'",
-  "removing '/usr/bin/node'",
-  "removing '/boot/vmlinuz'",
-  "removing '/'",
-  "",
-  "Segmentation fault (core dumped)",
-];
-
 
 function ShellBar({ className }) {
   const navigate = useNavigate();
@@ -51,8 +34,6 @@ function ShellBar({ className }) {
     setCommandHistory,
     destroyPhase,
     setDestroyPhase,
-    destroyLines,
-    setDestroyLines,
   } = useShell();
   const [input, setInput] = useState("");
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -125,33 +106,9 @@ function ShellBar({ className }) {
     setHistory((prev) => [...prev, { prompt, cmd, output, isError }]);
   };
 
-  // ======== Destruction sequence ========
   const startDestruction = () => {
-    setDestroyLines([]);
-    setDestroyPhase("deleting");
+    setDestroyPhase("blank");
   };
-
-  useEffect(() => {
-    if (destroyPhase !== "deleting") return;
-
-    setDestroyLines([]);
-    let lineIndex = 0;
-    const timer = setInterval(() => {
-      if (lineIndex < DELETE_LINES.length) {
-        setDestroyLines((prev) => [...prev, DELETE_LINES[lineIndex]]);
-        lineIndex++;
-      } else {
-        clearInterval(timer);
-        // After all lines print, go blank
-        setTimeout(() => {
-          setDestroyLines([]);
-          setDestroyPhase("blank");
-        }, 400);
-      }
-    }, 120);
-
-    return () => clearInterval(timer);
-  }, [destroyPhase, setDestroyPhase, setDestroyLines]);
 
   // Check if rm command has -r and -f flags
   const isRmRf = (args) => {
@@ -466,19 +423,9 @@ function ShellBar({ className }) {
 
   const hasOutput = history.length > 0;
 
-  const overlayClass = `${styles.destroyOverlay}${destroyPhase === "blank" ? ` ${styles.blank}` : ""}`;
-
   return (
     <>
-      {destroyPhase && (
-        <div className={overlayClass}>
-          {destroyLines.map((line, i) => (
-            <p key={i} className={styles.destroyLine}>
-              {line}
-            </p>
-          ))}
-        </div>
-      )}
+      {destroyPhase && <div className={styles.destroyOverlay} />}
       <div
         className={`${styles.shell}${className ? ` ${className}` : ""}`}
         onClick={focusInput}

@@ -8,7 +8,6 @@ export const ShellProvider = ({ children }) => {
   const [history, setHistory] = useState([]);
   const [commandHistory, setCommandHistory] = useState([]);
   const [destroyPhase, setDestroyPhase] = useState(null);
-  const [destroyLines, setDestroyLines] = useState([]);
 
   return (
     <ShellContext.Provider
@@ -19,8 +18,6 @@ export const ShellProvider = ({ children }) => {
         setCommandHistory,
         destroyPhase,
         setDestroyPhase,
-        destroyLines,
-        setDestroyLines,
       }}
     >
       {children}

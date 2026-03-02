@@ -92,7 +92,7 @@ function About() {
             </div>
             <div className={styles.expEducation}>
               <div className={styles.expHeader}>
-                <span className={styles.expTitle}>B.Sc. Computer Science</span>
+                <span className={styles.expTitle}>B.A Mathematics</span>
                 <span className={styles.expPeriod}>2023 – 2027</span>
               </div>
               <span className={styles.expOrg}>University of British Columbia</span>
@@ -126,7 +126,7 @@ function About() {
           <h2 className={styles.sectionTitle}>My Story</h2>
           <div className={styles.storyBody}>
             <p>
-              Currently pursuing Computer Science at UBC in Vancouver, BC,
+              Currently pursuing Mathematics at UBC in Vancouver, BC,
               where I combine academic learning with hands-on technical
               experience. My work spans from supporting researchers on
               high-performance computing clusters to building personal

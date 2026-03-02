@@ -35,7 +35,7 @@ function Hero() {
 
         {/* Bio */}
         <p className={styles.bio}>
-          Second-year prospective Mathematics student at UBC, with a
+          Third year Mathematics student at UBC, with a
           passion for Technology and Finance. Building solutions that
           enhance and optimize everyday life.
         </p>

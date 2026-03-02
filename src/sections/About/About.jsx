@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import styles from "./AboutStyles.module.css";
 import aboutPhoto from "../../assets/About.jpg";
 import ShellBar from "../../common/ShellBar";
+import { useTheme } from "../../common/ThemeContext";
 
 function About() {
+  const { theme, toggleTheme } = useTheme();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -65,7 +67,7 @@ function About() {
                 Computer Science Student & Technical Support Specialist
               </p>
               <p className={styles.bio}>
-                Second-year Computer Science student at UBC with expertise
+                Third-year Mathematics student at UBC with expertise
                 in technical support, problem-solving, and customer service.
                 Experienced in high-performance computing environments and
                 translating complex technical concepts for diverse audiences.
@@ -153,6 +155,9 @@ function About() {
       {/* Footer */}
       <footer className={styles.footer}>
         <span>&copy; 2026 Liam Sbarro</span>
+        <span className={styles.themeToggle} onClick={toggleTheme}>
+          [{theme === 'dark' ? 'light' : 'dark'}]
+        </span>
       </footer>
     </div>
   );

@@ -251,6 +251,9 @@
 
 /* ---- Footer ---- */
 .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   max-width: 880px;
   padding: 10px 16px;
@@ -261,6 +264,19 @@
   color: var(--text-muted);
   letter-spacing: 1px;
   margin-bottom: 40px;
+}
+
+.themeToggle {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity 0.15s steps(3);
+}
+
+.themeToggle:hover {
+  opacity: 1;
 }
 
 /* ======================================

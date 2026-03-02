@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useShell } from "./ShellContext";
 import styles from "./ShellBarStyles.module.css";
 
@@ -452,6 +452,11 @@ function ShellBar({ className }) {
           </div>
         )}
         <div className={styles.inputLine}>
+          {currentDir !== "~" && (
+            <Link to="/" className={styles.backHint} onClick={(e) => e.stopPropagation()}>
+              [cd ~]
+            </Link>
+          )}
           <span className={styles.prompt}>{prompt}</span>
           <input
             ref={inputRef}

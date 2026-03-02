@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import styles from "./ProjectsStyles.module.css";
 import ShellBar from "../../common/ShellBar";
+import { useTheme } from "../../common/ThemeContext";
 
 import eInk1 from "./Project Photos/E-ink 1.jpg";
 import eInk2 from "./Project Photos/E-ink 2.jpg";
@@ -8,6 +9,7 @@ import plotter1 from "./Project Photos/PenPlotter1.jpg";
 import plotter2 from "./Project Photos/PenPlotter2.jpg";
 
 function Projects() {
+  const { theme, toggleTheme } = useTheme();
   const [visible, setVisible] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -166,6 +168,9 @@ function Projects() {
       {/* Footer */}
       <footer className={styles.footer}>
         <span>&copy; 2026 Liam Sbarro</span>
+        <span className={styles.themeToggle} onClick={toggleTheme}>
+          [{theme === 'dark' ? 'light' : 'dark'}]
+        </span>
       </footer>
 
       {/* Image Modal */}

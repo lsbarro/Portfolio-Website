@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import styles from "./HeroStyles.module.css";
 import heroImg from "../../assets/hero-img.png";
 import ShellBar from "../../common/ShellBar";
+import { useTheme } from "../../common/ThemeContext";
 
 function Hero() {
+  const { theme, toggleTheme } = useTheme();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -89,6 +91,9 @@ function Hero() {
       {/* Footer */}
       <footer className={styles.footer}>
         <span>&copy; 2026 Liam Sbarro</span>
+        <span className={styles.themeToggle} onClick={toggleTheme}>
+          [{theme === 'dark' ? 'light' : 'dark'}]
+        </span>
       </footer>
     </section>
   );

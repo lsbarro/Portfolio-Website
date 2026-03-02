@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import styles from "./PhotographyPortfolioStyles.module.css";
 import ShellBar from "../../common/ShellBar";
+import { useTheme } from "../../common/ThemeContext";
 
 import adaptiveSports1 from "./PhotoAssets/AdaptiveSports1.jpeg";
 import AdaptiveSports2 from "./PhotoAssets/AdaptiveSports2.jpeg";
@@ -28,6 +29,7 @@ import SunsetBackground from "./PhotoAssets/SunsetBackground.jpg";
 import Swing from "./PhotoAssets/Swing.jpg";
 
 function PhotographyPortfolio() {
+  const { theme, toggleTheme } = useTheme();
   const [visible, setVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -116,6 +118,9 @@ function PhotographyPortfolio() {
       <footer className={styles.footer}>
         <span>{photos.length} photos</span>
         <span>&copy; 2026 Liam Sbarro</span>
+        <span className={styles.themeToggle} onClick={toggleTheme}>
+          [{theme === 'dark' ? 'light' : 'dark'}]
+        </span>
       </footer>
 
       {/* Modal */}

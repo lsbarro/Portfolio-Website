@@ -90,6 +90,19 @@
   margin-bottom: 40px;
 }
 
+.themeToggle {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity 0.15s steps(3);
+}
+
+.themeToggle:hover {
+  opacity: 1;
+}
+
 /* ---- Modal ---- */
 .modal {
   position: fixed;

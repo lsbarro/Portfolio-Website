@@ -94,6 +94,23 @@
   min-width: 0;
 }
 
+/* ---- Back Hint ---- */
+.backHint {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  opacity: 0.4;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-right: 12px;
+  text-decoration: none;
+  transition: opacity 0.15s steps(3);
+}
+
+.backHint:hover {
+  opacity: 1;
+}
+
 /* ---- Clear Hint ---- */
 .hint {
   font-size: 10px;
@@ -162,7 +179,8 @@
     font-size: 11px;
   }
 
-  .hint {
+  .hint,
+  .backHint {
     font-size: 9px;
   }
 }

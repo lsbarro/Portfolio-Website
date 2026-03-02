@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "./AboutStyles.module.css";
 import aboutPhoto from "../../assets/About.jpg";
 import ShellBar from "../../common/ShellBar";
+import BackButton from "../../common/BackButton";
 
 function About() {
   const [visible, setVisible] = useState(false);
@@ -48,6 +49,8 @@ function About() {
 
   return (
     <div className={`${styles.page} ${visible ? styles.visible : ""}`}>
+      <BackButton />
+
       {/* Shell Bar */}
       <ShellBar className={styles.shellBar} />
 
@@ -65,8 +68,9 @@ function About() {
                 Computer Science Student & Technical Support Specialist
               </p>
               <p className={styles.bio}>
-           I'm a third-year Mathematics student at UBC and Junior Research Computing Support Analyst with UBC's Advanced Research Computing department. Day to day, I help researchers get their work running on national HPC clusters: writing and optimizing job scripts, building software environments with tools like Slurm and Spack, and figuring out why things break under distributed load.
-I've been taking things apart as long as I can remember. Originally it was an occasional radio or household appliance; now I repair audio amplifiers, design and 3D print parts for things that probably don't need custom parts, and generally enjoy any problem that involves tracing a fault through a system. I also host my own server stack, running media and game hosting for a group of friends, built on HPC design principles. When I'm not at a desk, I snowboard, mountain bike, and hike around BC.     
+                I am a third-year Mathematics student at UBC and a Junior Research Computing Support Analyst with UBC's Advanced Research Computing department. 
+                I enjoy taking things apart, and putting them back together if I can! I like working with with hardware like amplifiers, 
+                and I enjoy
               </p>
             </div>
           </div>

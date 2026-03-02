@@ -40,32 +40,6 @@ const DELETE_LINES = [
   "Segmentation fault (core dumped)",
 ];
 
-const PANIC_LINES = [
-  "Kernel panic - not syncing: Attempted to kill init!",
-  "exitcode=0x00000009",
-  "",
-  "CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-lsbarro #1",
-  "Hardware name: lsbarro/portfolio (DT)",
-  "",
-  "Call trace:",
-  " panic+0x10c/0x340",
-  " do_exit+0xa18/0xa28",
-  " do_group_exit+0x34/0x90",
-  "",
-  "---[ end Kernel panic - not syncing: Attempted to kill init! ]---",
-];
-
-const REBOOT_LINES = [
-  "Rebooting...",
-  "",
-  "lsbarro BIOS v1.0",
-  "Memory test: 8192K OK",
-  "",
-  "Loading lsbarro.dev...",
-  "Restoring filesystem... done",
-  "",
-  "System ready.",
-];
 
 function ShellBar({ className }) {
   const navigate = useNavigate();
@@ -82,7 +56,6 @@ function ShellBar({ className }) {
   } = useShell();
   const [input, setInput] = useState("");
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [overlayFading, setOverlayFading] = useState(false);
   const inputRef = useRef(null);
   const outputRef = useRef(null);
 
@@ -159,71 +132,26 @@ function ShellBar({ className }) {
   };
 
   useEffect(() => {
-    if (!destroyPhase) return;
+    if (destroyPhase !== "deleting") return;
 
-    let timer;
+    setDestroyLines([]);
     let lineIndex = 0;
+    const timer = setInterval(() => {
+      if (lineIndex < DELETE_LINES.length) {
+        setDestroyLines((prev) => [...prev, DELETE_LINES[lineIndex]]);
+        lineIndex++;
+      } else {
+        clearInterval(timer);
+        // After all lines print, go blank
+        setTimeout(() => {
+          setDestroyLines([]);
+          setDestroyPhase("blank");
+        }, 400);
+      }
+    }, 120);
 
-    if (destroyPhase === "deleting") {
-      setDestroyLines([]);
-      timer = setInterval(() => {
-        if (lineIndex < DELETE_LINES.length) {
-          setDestroyLines((prev) => [...prev, DELETE_LINES[lineIndex]]);
-          lineIndex++;
-        } else {
-          clearInterval(timer);
-          setTimeout(() => setDestroyPhase("panic"), 400);
-        }
-      }, 120);
-    } else if (destroyPhase === "panic") {
-      setDestroyLines([]);
-      // Small delay for flicker effect
-      timer = setTimeout(() => {
-        let pLineIndex = 0;
-        const panicTimer = setInterval(() => {
-          if (pLineIndex < PANIC_LINES.length) {
-            setDestroyLines((prev) => [...prev, PANIC_LINES[pLineIndex]]);
-            pLineIndex++;
-          } else {
-            clearInterval(panicTimer);
-            setTimeout(() => setDestroyPhase("reboot"), 2500);
-          }
-        }, 80);
-        // Store for cleanup
-        timer = panicTimer;
-      }, 600);
-    } else if (destroyPhase === "reboot") {
-      setDestroyLines([]);
-      timer = setTimeout(() => {
-        let rLineIndex = 0;
-        const rebootTimer = setInterval(() => {
-          if (rLineIndex < REBOOT_LINES.length) {
-            setDestroyLines((prev) => [...prev, REBOOT_LINES[rLineIndex]]);
-            rLineIndex++;
-          } else {
-            clearInterval(rebootTimer);
-            setTimeout(() => {
-              setOverlayFading(true);
-              setTimeout(() => {
-                setDestroyPhase(null);
-                setDestroyLines([]);
-                setOverlayFading(false);
-                setHistory([]);
-                setCommandHistory([]);
-                navigate("/");
-              }, 600);
-            }, 1200);
-          }
-        }, 250);
-        timer = rebootTimer;
-      }, 500);
-    }
-
-    return () => {
-      clearInterval(timer);
-      clearTimeout(timer);
-    };
-  }, [destroyPhase, setDestroyPhase, setDestroyLines, setHistory, setCommandHistory, navigate]);
+    return () => clearInterval(timer);
+  }, [destroyPhase, setDestroyPhase, setDestroyLines]);
 
   // Check if rm command has -r and -f flags
   const isRmRf = (args) => {
@@ -412,11 +340,7 @@ function ShellBar({ className }) {
 
       case "fortune": {
         const fortunes = [
-          "You will mass-produce a great portfolio.",
-          "A great commit awaits you.",
-          "The bugs you seek are in the code you wrote.",
-          "sudo make me a sandwich.",
-          "There are 10 types of people in the world.",
+          "You will pet a cat today.",
         ];
         addOutput(
           trimmed,
@@ -542,16 +466,7 @@ function ShellBar({ className }) {
 
   const hasOutput = history.length > 0;
 
-  // Determine overlay CSS class
-  const overlayClass = [
-    styles.destroyOverlay,
-    destroyPhase === "panic" ? styles.panic : "",
-    destroyPhase === "reboot" ? styles.reboot : "",
-    destroyPhase === "panic" && destroyLines.length === 0 ? styles.flicker : "",
-    overlayFading ? styles.fadeOut : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const overlayClass = `${styles.destroyOverlay}${destroyPhase === "blank" ? ` ${styles.blank}` : ""}`;
 
   return (
     <>

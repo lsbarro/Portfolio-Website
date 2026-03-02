@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import styles from "./PortfolioStyles.module.css";
-import projectsIcon from "../../assets/projectsicon.jpeg";
 import aboutIcon from "../../assets/About.jpg";
 
 function Portfolio() {
@@ -11,13 +10,6 @@ function Portfolio() {
       description: "Who I am, what I do.",
       image: aboutIcon,
       link: "/about",
-    },
-    {
-      id: 2,
-      title: "Projects",
-      description: "From business ideas to chemical art.",
-      image: projectsIcon,
-      link: "/projects",
     },
   ];
 

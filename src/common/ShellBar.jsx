@@ -2,10 +2,10 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useShell } from "./ShellContext";
 import styles from "./ShellBarStyles.module.css";
+import { trackEvent } from "./analytics";
 
 const DIRS = {
   about: "/about",
-  projects: "/projects",
   photos: "/photography",
 };
 
@@ -125,6 +125,7 @@ function ShellBar({ className }) {
 
     const parts = trimmed.split(/\s+/);
     const cmd = parts[0].toLowerCase();
+    trackEvent("shell_command", "shell", cmd);
     const args = parts.slice(1);
 
     switch (cmd) {

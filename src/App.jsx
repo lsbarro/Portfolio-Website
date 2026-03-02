@@ -12,6 +12,7 @@ import Hero from "./sections/Hero/Hero";
 import PhotographyPortfolio from "./sections/Photography/PhotographyPortfolio";
 import Projects from "./sections/Projects/Projects";
 import About from "./sections/About/About";
+import { trackPageView } from "./common/analytics";
 
 const AppContent = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const AppContent = () => {
   useEffect(() => {
     const wrapper = document.querySelector('.parallax-wrapper');
     if (wrapper) wrapper.scrollTop = 0;
+    trackPageView(location.pathname);
   }, [location.pathname]);
 
   return (

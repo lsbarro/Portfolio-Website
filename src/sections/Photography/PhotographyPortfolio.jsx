@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import styles from "./PhotographyPortfolioStyles.module.css";
 import ShellBar from "../../common/ShellBar";
 import { useTheme } from "../../common/ThemeContext";
+import { trackEvent } from "../../common/analytics";
 
 import adaptiveSports1 from "./PhotoAssets/AdaptiveSports1.jpeg";
 import AdaptiveSports2 from "./PhotoAssets/AdaptiveSports2.jpeg";
@@ -65,7 +66,10 @@ function PhotographyPortfolio() {
     { id: 24, alt: "Sun over rocks", src: SunOverRocks },
   ];
 
-  const openModal = (index) => setSelectedIndex(index);
+  const openModal = (index) => {
+    trackEvent("photo_open", "gallery", photos[index].alt);
+    setSelectedIndex(index);
+  };
   const closeModal = () => setSelectedIndex(null);
 
   const goPrev = useCallback(() => {

@@ -4,6 +4,7 @@ import styles from "./HeroStyles.module.css";
 import heroImg from "../../assets/hero-img.png";
 import ShellBar from "../../common/ShellBar";
 import { useTheme } from "../../common/ThemeContext";
+import { trackEvent } from "../../common/analytics";
 
 function Hero() {
   const { theme, toggleTheme } = useTheme();
@@ -47,10 +48,7 @@ function Hero() {
           <Link to="/about" className={styles.navButton}>
             About Me
           </Link>
-          <Link to="/projects" className={styles.navButton}>
-            Projects
-          </Link>
-          <Link to="/photography" className={styles.navButton}>
+<Link to="/photography" className={styles.navButton}>
             Photos
           </Link>
         </nav>
@@ -63,6 +61,7 @@ function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
+              onClick={() => trackEvent("social_click", "outbound", "instagram")}
             >
               Instagram
             </a>
@@ -72,6 +71,7 @@ function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
+              onClick={() => trackEvent("social_click", "outbound", "github")}
             >
               Github
             </a>
@@ -81,6 +81,7 @@ function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
+              onClick={() => trackEvent("social_click", "outbound", "linkedin")}
             >
               LinkedIn
             </a>

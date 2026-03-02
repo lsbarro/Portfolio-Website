@@ -35,9 +35,9 @@ function About() {
   ];
 
   const skills = [
-    "Python", "Java", "React.js", "Git",
+    "Python", "C++", "Java", "Git",
     "Linux", "HPC", "Shell Scripting",
-    "Slurm", "Unraid", "Arduino",
+    "Slurm", "Unraid", "SQL",
   ];
 
   const interests = [
@@ -65,9 +65,10 @@ function About() {
                 Computer Science Student & Technical Support Specialist
               </p>
               <p className={styles.bio}>
-                I am a third-year Mathematics student at UBC and a Junior Research Computing Support Analyst with UBC's Advanced Research Computing department. 
-                I enjoy taking things apart, and putting them back together if I can! I like working with with hardware like amplifiers, 
-                and I enjoy
+                I'm a third-year Mathematics student at UBC and Junior Research Computing Support Analyst with UBC's Advanced Research Computing department. Day to day, I help researchers get their work running on national HPC clusters: writing and optimizing job scripts, building software environments with tools like Slurm and Spack, and figuring out why things break under distributed load.
+              </p>
+              <p className={styles.bio}>
+                I've been taking things apart as long as I can remember. Originally it was an occasional radio or household appliance; now I repair audio amplifiers, design and 3D print parts for things that probably don't need custom parts, and generally enjoy any problem that involves tracing a fault through a system. I also host my own server stack, running media and game hosting for a group of friends, built on HPC design principles. When I'm not at a desk, I snowboard, mountain bike, and hike around BC.
               </p>
             </div>
           </div>
@@ -120,33 +121,6 @@ function About() {
           </div>
         </div>
 
-        {/* Story */}
-        <section className={styles.card}>
-          <h2 className={styles.sectionTitle}>My Story</h2>
-          <div className={styles.storyBody}>
-            <p>
-              Currently pursuing Mathematics at UBC in Vancouver, BC,
-              where I combine academic learning with hands-on technical
-              experience. My work spans from supporting researchers on
-              high-performance computing clusters to building personal
-              projects that solve real-world problems.
-            </p>
-            <p>
-              I specialize in translating complex technical concepts into
-              accessible language, whether I'm helping researchers
-              troubleshoot HPC issues or creating documentation for diverse
-              user bases. My experience includes everything from Linux
-              system administration to developing Python solutions that
-              improve operational efficiency.
-            </p>
-            <p>
-              When I'm not coding or providing technical support, you'll
-              find me snowboarding in the mountains, taking photographs, or
-              working on personal projects like my 4TB media server that
-              streams content to 30+ users.
-            </p>
-          </div>
-        </section>
       </main>
 
       {/* Footer */}

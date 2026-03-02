@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import styles from "./AboutStyles.module.css";
 import aboutPhoto from "../../assets/About.jpg";
 import ShellBar from "../../common/ShellBar";
-import BackButton from "../../common/BackButton";
 
 function About() {
   const [visible, setVisible] = useState(false);
@@ -49,8 +48,6 @@ function About() {
 
   return (
     <div className={`${styles.page} ${visible ? styles.visible : ""}`}>
-      <BackButton />
-
       {/* Shell Bar */}
       <ShellBar className={styles.shellBar} />
 

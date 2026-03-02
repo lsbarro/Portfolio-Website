@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
 import styles from "./PhotographyPortfolioStyles.module.css";
-import BackButton from "../../common/BackButton";
-import { useTheme } from "../../common/ThemeContext";
-// Import your photos
+import ShellBar from "../../common/ShellBar";
+
 import adaptiveSports1 from "./PhotoAssets/AdaptiveSports1.jpeg";
-import AdaptiveSports3 from "./PhotoAssets/AdaptiveSports3.jpeg";
 import AdaptiveSports2 from "./PhotoAssets/AdaptiveSports2.jpeg";
+import AdaptiveSports3 from "./PhotoAssets/AdaptiveSports3.jpeg";
 import AdaptiveSports4 from "./PhotoAssets/AdaptiveSports4.jpeg";
 import AlexReflection from "./PhotoAssets/AlexReflection.jpg";
 import AuroraAndMoon from "./PhotoAssets/AuroraAndMoon.jpg";
@@ -29,461 +27,136 @@ import SunOverRocks from "./PhotoAssets/SunOverRocks.jpg";
 import SunsetBackground from "./PhotoAssets/SunsetBackground.jpg";
 import Swing from "./PhotoAssets/Swing.jpg";
 
-// Progressive Image component
-const ProgressiveImage = ({ src, alt, className, onClick }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState("");
-  
-  useEffect(() => {
-    // Create low quality placeholder
-    const lowQualitySrc = generateLowQualityPlaceholder(src);
-    setCurrentSrc(lowQualitySrc);
-    
-    // Preload high quality image
-    const highResImage = new Image();
-    highResImage.src = src;
-    highResImage.onload = () => {
-      setCurrentSrc(src);
-      setIsLoaded(true);
-    };
-  }, [src]);
-  
-  // Generate a blur placeholder (in real implementation, you'd have actual thumbnails)
-  const generateLowQualityPlaceholder = (imageSrc) => {
-    // For the example, we're using a generic placeholder
-    // In production, you should generate actual thumbnails
-    return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23f0f0f0'/%3E%3C/svg%3E";
-  };
-  
-  return (
-    <img
-      src={currentSrc}
-      alt={alt}
-      className={className}
-      style={{
-        filter: isLoaded ? 'none' : 'blur(20px)',
-        transition: 'filter 0.3s ease-out',
-      }}
-      onClick={onClick}
-      loading="lazy"
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = "https://via.placeholder.com/600x400?text=Photo";
-      }}
-    />
-  );
-};
-
 function PhotographyPortfolio() {
-  const { theme } = useTheme();
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [visiblePhotos, setVisiblePhotos] = useState([]);
-  const [isIntersecting, setIsIntersecting] = useState({});
-  const scrollYRef = useRef(0);
-  const bodyStylesRef = useRef({
-    position: '',
-    top: '',
-    left: '',
-    right: '',
-    overflow: ''
-  });
+  const [visible, setVisible] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
-  // Use imported photos
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const photos = [
-    {
-      id: 1,
-      alt: "adaptive sports",
-      src: adaptiveSports1,
-    },
-    {
-      id: 2,
-      alt: "adaptive sports",
-      src: AdaptiveSports2,
-    },
-    {
-      id: 3,
-      alt: "adaptive sports",
-      src: AdaptiveSports3,
-    },
-    {
-      id: 4,
-      alt: "adaptive sports",
-      src: AdaptiveSports4,
-    },
-    {
-      id: 5,
-      alt: "camilo 1",
-      src: GlowingLight,
-    },
-    {
-      id: 6,
-      alt: "camilo 2",
-      src: SunsetBackground,
-    },
-    {
-      id: 7,
-      alt: "Moon over snowy mountains",
-      src: MoonOverMountainSunsert,
-    },
-    {
-      id: 8,
-      alt: "Camilo on Rock",
-      src: Onrock,
-    },
-    {
-      id: 9,
-      alt: "Mira 1",
-      src: MiraIo_SF_15,
-    },
-    {
-      id: 10,
-      alt: "Mira 2",
-      src: MiraIo_SF_20,
-    },
-    {
-      id: 11,
-      alt: "Mira 3",
-      src: MiraIo_SF_42,
-    },
-    {
-      id: 12,
-      alt: "Mira 4",
-      src: MiraIo_SF_62,
-    },
-    {
-      id: 13,
-      alt: "Matthew 1",
-      src: MatthreFrontSPeaker,
-    },
-    {
-      id: 14,
-      alt: "Matthew 2",
-      src: MatthewSideSpeaker,
-    },
-    {
-      id: 15,
-      alt: "Matthew 3",
-      src: Swing,
-    },
-    {
-      id: 16,
-      alt: "Matthew 4",
-      src: PersonWithBlueGlowingSIgn,
-    },
-    {
-      id: 17,
-      alt: "Landscape 1",
-      src: SnowyTrees,
-    },
-    {
-      id: 18,
-      alt: "Landscape 2",
-      src: NightSnowLight,
-    },
-    {
-      id: 19,
-      alt: "Landscape 3",
-      src: DronePath,
-    },
-    {
-      id: 20,
-      alt: "Landscape 4",
-      src: AlexReflection,
-    },
-    {
-      id: 21,
-      alt: "Landscape 5",
-      src: AuroraAndMoon,
-    },
-    {
-      id: 22,
-      alt: "Landscape 6",
-      src: CargoShip,
-    },
-    {
-      id: 23,
-      alt: "Landscape 7",
-      src: MountainsDay,
-    },
-    {
-      id: 24,
-      alt: "Landscape 8",
-      src: SunOverRocks,
-    },
+    { id: 1, alt: "Adaptive sports", src: adaptiveSports1 },
+    { id: 2, alt: "Adaptive sports", src: AdaptiveSports2 },
+    { id: 3, alt: "Adaptive sports", src: AdaptiveSports3 },
+    { id: 4, alt: "Adaptive sports", src: AdaptiveSports4 },
+    { id: 5, alt: "Glowing light", src: GlowingLight },
+    { id: 6, alt: "Sunset background", src: SunsetBackground },
+    { id: 7, alt: "Moon over snowy mountains", src: MoonOverMountainSunsert },
+    { id: 8, alt: "On rock", src: Onrock },
+    { id: 9, alt: "Portrait 1", src: MiraIo_SF_15 },
+    { id: 10, alt: "Portrait 2", src: MiraIo_SF_20 },
+    { id: 11, alt: "Portrait 3", src: MiraIo_SF_42 },
+    { id: 12, alt: "Portrait 4", src: MiraIo_SF_62 },
+    { id: 13, alt: "Speaker front", src: MatthreFrontSPeaker },
+    { id: 14, alt: "Speaker side", src: MatthewSideSpeaker },
+    { id: 15, alt: "Swing", src: Swing },
+    { id: 16, alt: "Blue glowing sign", src: PersonWithBlueGlowingSIgn },
+    { id: 17, alt: "Snowy trees", src: SnowyTrees },
+    { id: 18, alt: "Night snow light", src: NightSnowLight },
+    { id: 19, alt: "Drone path", src: DronePath },
+    { id: 20, alt: "Reflection", src: AlexReflection },
+    { id: 21, alt: "Aurora and moon", src: AuroraAndMoon },
+    { id: 22, alt: "Cargo ship", src: CargoShip },
+    { id: 23, alt: "Mountains day", src: MountainsDay },
+    { id: 24, alt: "Sun over rocks", src: SunOverRocks },
   ];
 
-  // Advanced lazy loading with IntersectionObserver
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '200px', // Load images 200px before they enter viewport
-      threshold: 0.1
-    };
+  const openModal = (index) => setSelectedIndex(index);
+  const closeModal = () => setSelectedIndex(null);
 
-    const imageObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        setIsIntersecting(prev => ({
-          ...prev,
-          [entry.target.dataset.id]: entry.isIntersecting
-        }));
-      });
-    }, observerOptions);
-
-    // Get all image containers
-    const imageElements = document.querySelectorAll(`.${styles.photoItem}`);
-    imageElements.forEach(el => {
-      imageObserver.observe(el);
-    });
-
-    return () => {
-      imageElements.forEach(el => {
-        imageObserver.unobserve(el);
-      });
-    };
+  const goPrev = useCallback(() => {
+    setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
   }, []);
 
-  // Preload critical images (first 4)
-  useEffect(() => {
-    // Preload first few images for immediate display
-    const preloadImages = photos.slice(0, 4).map(photo => photo.src);
-    
-    preloadImages.forEach(imageSrc => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = imageSrc;
-      document.head.appendChild(link);
-    });
-  }, []);
+  const goNext = useCallback(() => {
+    setSelectedIndex((prev) => (prev < photos.length - 1 ? prev + 1 : prev));
+  }, [photos.length]);
 
-  // Handle modal opening
-  const openPhotoModal = (photo) => {
-    // Store current scroll position
-    scrollYRef.current = window.scrollY;
-    
-    // Save original body styles before modifying
-    const body = document.body;
-    bodyStylesRef.current = {
-      position: body.style.position,
-      top: body.style.top,
-      left: body.style.left,
-      right: body.style.right,
-      overflow: body.style.overflow
+  useEffect(() => {
+    if (selectedIndex === null) return;
+
+    const handleKey = (e) => {
+      if (e.key === "Escape") closeModal();
+      else if (e.key === "ArrowRight") goNext();
+      else if (e.key === "ArrowLeft") goPrev();
     };
-    
-    // Fix the body in place
-    body.style.position = 'fixed';
-    body.style.top = `-${scrollYRef.current}px`;
-    body.style.left = '0';
-    body.style.right = '0';
-    body.style.overflow = 'hidden';
-    
-    // Show the modal with the selected photo
-    setSelectedPhoto(photo);
-  };
 
-  // Handle modal closing
-  const closePhotoModal = () => {
-    // Restore original body styles
-    const body = document.body;
-    body.style.position = bodyStylesRef.current.position;
-    body.style.top = bodyStylesRef.current.top;
-    body.style.left = bodyStylesRef.current.left;
-    body.style.right = bodyStylesRef.current.right;
-    body.style.overflow = bodyStylesRef.current.overflow;
-    
-    // Restore scroll position
-    window.scrollTo(0, scrollYRef.current);
-    
-    // Close the modal
-    setSelectedPhoto(null);
-  };
-
-  // Handle keyboard navigation
-  const handleKeyDown = (e) => {
-    if (!selectedPhoto) return;
-
-    // Close modal on Escape key
-    if (e.key === "Escape") {
-      closePhotoModal();
-      return;
-    }
-
-    // Find current photo index
-    const currentIndex = photos.findIndex(
-      (photo) => photo.id === selectedPhoto.id
-    );
-
-    // Navigate with arrow keys
-    if (e.key === "ArrowRight" && currentIndex < photos.length - 1) {
-      setSelectedPhoto(photos[currentIndex + 1]);
-    } else if (e.key === "ArrowLeft" && currentIndex > 0) {
-      setSelectedPhoto(photos[currentIndex - 1]);
-    }
-  };
-
-  // Add event listener for keyboard navigation
-  useEffect(() => {
-    if (selectedPhoto) {
-      window.addEventListener("keydown", handleKeyDown);
-
-      return () => {
-        window.removeEventListener("keydown", handleKeyDown);
-      };
-    }
-  }, [selectedPhoto, handleKeyDown]);
-
-  // Cleanup function on unmount
-  useEffect(() => {
-    return () => {
-      // If component unmounts with modal open, restore body
-      if (selectedPhoto && bodyStylesRef.current) {
-        const body = document.body;
-        body.style.position = bodyStylesRef.current.position || '';
-        body.style.top = bodyStylesRef.current.top || '';
-        body.style.left = bodyStylesRef.current.left || '';
-        body.style.right = bodyStylesRef.current.right || '';
-        body.style.overflow = bodyStylesRef.current.overflow || '';
-        if (scrollYRef.current !== undefined) {
-          window.scrollTo(0, scrollYRef.current);
-        }
-      }
-    };
-  }, []);
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [selectedIndex, goNext, goPrev]);
 
   return (
-    <section className={styles.container}>
-      <div className={styles.header}>
-        <BackButton />
-        <h2 className={styles.sectionTitle}>Photography Portfolio</h2>
-      </div>
+    <div className={`${styles.page} ${visible ? styles.visible : ""}`}>
+      {/* Shell Bar */}
+      <ShellBar className={styles.shellBar} />
 
-      <div className={styles.galleryContainer}>
-        {photos.map((photo) => (
-          <div
-            key={photo.id}
-            className={styles.photoItem}
-            onClick={() => openPhotoModal(photo)}
-            data-id={photo.id}
-          >
-            <ProgressiveImage
-              src={photo.src}
-              alt={photo.alt}
-              className={styles.image}
-              onClick={() => openPhotoModal(photo)}
-            />
-          </div>
-        ))}
-      </div>
-
-      {selectedPhoto && (
-        <div className={styles.modal} onClick={closePhotoModal}>
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className={styles.closeButton}
-              onClick={closePhotoModal}
-              aria-label="Close"
+      {/* Gallery */}
+      <main className={styles.galleryWrap}>
+        <div className={styles.gallery}>
+          {photos.map((photo, i) => (
+            <div
+              key={photo.id}
+              className={styles.photoFrame}
+              onClick={() => openModal(i)}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-
-            <div className={styles.enlargedImageContainer}>
-              <ProgressiveImage
-                src={selectedPhoto.src}
-                alt={selectedPhoto.alt}
-                className={styles.enlargedImage}
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                className={styles.photo}
+                loading="lazy"
               />
             </div>
+          ))}
+        </div>
+      </main>
 
-            {selectedPhoto.title && (
-              <h4 className={styles.photoTitle}>{selectedPhoto.title}</h4>
-            )}
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <span>{photos.length} photos</span>
+        <span>&copy; 2026 Liam Sbarro</span>
+      </footer>
 
-            <div className={styles.navigationControls}>
-              <button
-                className={`${styles.navButton} ${styles.prevButton}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const currentIndex = photos.findIndex(
-                    (photo) => photo.id === selectedPhoto.id
-                  );
-                  if (currentIndex > 0) {
-                    setSelectedPhoto(photos[currentIndex - 1]);
-                  }
-                }}
-                disabled={
-                  photos.findIndex((photo) => photo.id === selectedPhoto.id) ===
-                  0
-                }
-                aria-label="Previous photo"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
+      {/* Modal */}
+      {selectedIndex !== null && (
+        <div className={styles.modal} onClick={closeModal}>
+          <div className={styles.modalInner} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalTopBar}>
+              <span className={styles.modalCounter}>
+                {selectedIndex + 1} / {photos.length}
+              </span>
+              <button className={styles.closeBtn} onClick={closeModal}>
+                [X]
               </button>
-
+            </div>
+            <div className={styles.modalImageWrap}>
+              <img
+                src={photos[selectedIndex].src}
+                alt={photos[selectedIndex].alt}
+                className={styles.modalImage}
+              />
+            </div>
+            <div className={styles.modalNav}>
               <button
-                className={`${styles.navButton} ${styles.nextButton}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const currentIndex = photos.findIndex(
-                    (photo) => photo.id === selectedPhoto.id
-                  );
-                  if (currentIndex < photos.length - 1) {
-                    setSelectedPhoto(photos[currentIndex + 1]);
-                  }
-                }}
-                disabled={
-                  photos.findIndex((photo) => photo.id === selectedPhoto.id) ===
-                  photos.length - 1
-                }
-                aria-label="Next photo"
+                className={styles.navBtn}
+                onClick={goPrev}
+                disabled={selectedIndex === 0}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
+                &larr; Prev
+              </button>
+              <button
+                className={styles.navBtn}
+                onClick={goNext}
+                disabled={selectedIndex === photos.length - 1}
+              >
+                Next &rarr;
               </button>
             </div>
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }
 

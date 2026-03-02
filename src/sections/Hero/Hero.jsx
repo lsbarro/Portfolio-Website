@@ -1,65 +1,97 @@
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styles from "./HeroStyles.module.css";
 import heroImg from "../../assets/hero-img.png";
-import sun from '../../assets/sun.svg';
-import moon from '../../assets/moon.svg';
-import instagramLight from '../../assets/instagramwhite.png';
-import instagramDark from '../../assets/instagramblack.png';
-import githubLight from '../../assets/github-light.svg';
-import githubDark from '../../assets/github-dark.svg';
-import linkedinLight from '../../assets/linkedin-light.svg';
-import linkedinDark from '../../assets/linkedin-dark.svg';
-import CV from "../../assets/cv.pdf";
-import { useTheme } from "../../common/ThemeContext";
+import ShellBar from "../../common/ShellBar";
 
 function Hero() {
-  const { theme, toggleTheme } = useTheme();
-  const themeIcon = theme === 'light' ? sun : moon;
-  const instagramIcon = theme === 'light' ? instagramLight : instagramDark;
-  const githubIcon = theme === 'light' ? githubLight : githubDark;
-  const linkedinIcon = theme === 'light' ? linkedinLight : linkedinDark;
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <section className={styles.container} style={{paddingTop: 0, marginTop: 0}}>
-      <div className={styles.profileSection}>
-        <div className={styles.profileImageContainer}>
-          <img src={heroImg} alt="Liam Sbarro" className={styles.hero} />
-        </div>
-        <button 
-          onClick={toggleTheme}
-          className={styles.colorModeContainer}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          <img src={themeIcon} alt="Theme toggle" className={styles.themeIcon} />
-        </button>
-      </div>
+    <section className={`${styles.container} ${visible ? styles.visible : ""}`}>
+      {/* Shell Bar */}
+      <ShellBar className={styles.shellBar} />
 
-      <div className={styles.info}>
-        <div className={styles.nameTitle}>
-          <h1 className={styles.name}>Liam Sbarro</h1>
+      {/* Main Card */}
+      <div className={styles.mainCard}>
+        {/* Profile Row */}
+        <div className={styles.profileRow}>
+          <div className={styles.photoFrame}>
+            <img src={heroImg} alt="Liam Sbarro" className={styles.photo} />
+          </div>
+
+          <div className={styles.identity}>
+            <h1 className={styles.name}>Liam Sbarro</h1>
+            <div className={styles.tagline}>
+              Mathematics &mdash; UBC
+            </div>
+          </div>
         </div>
-        
-        <p className={styles.description}>
-        I'm a second-year prospective Mathematics student at UBC, with a passion for Technology and Finance. I'm particularly interested in developing solutions that enhance and optimize everyday life.
+
+        {/* Bio */}
+        <p className={styles.bio}>
+          Second-year prospective Mathematics student at UBC, with a
+          passion for Technology and Finance. Building solutions that
+          enhance and optimize everyday life.
         </p>
-        
-        <div className={styles.actions}>
-          <div className={styles.socialLinks}>
-            <a href="https://www.instagram.com/li.am2005/" target="_blank" rel="noopener noreferrer" aria-label="Visit Liam's Instagram profile">
-              <img src={instagramIcon} alt="Instagram" />
+
+        {/* Navigation */}
+        <nav className={styles.navRow}>
+          <Link to="/about" className={styles.navButton}>
+            About Me
+          </Link>
+          <Link to="/projects" className={styles.navButton}>
+            Projects
+          </Link>
+          <Link to="/photography" className={styles.navButton}>
+            Photos
+          </Link>
+        </nav>
+
+        {/* Separator + Social */}
+        <div className={styles.bottomRow}>
+          <div className={styles.socialRow}>
+            <a
+              href="https://www.instagram.com/li.am2005/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialLink}
+            >
+              Instagram
             </a>
-            <a href="https://github.com/lsbarro" target="_blank" rel="noopener noreferrer" aria-label="Visit Liam's GitHub profile">
-              <img src={githubIcon} alt="GitHub" />
+            <span className={styles.dot}>&middot;</span>
+            <a
+              href="https://github.com/lsbarro"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialLink}
+            >
+              Github
             </a>
-            <a href="https://www.linkedin.com/in/liam-sbarro-8a2b19211/?originalSubdomain=ca" target="_blank" rel="noopener noreferrer" aria-label="Visit Liam's LinkedIn profile">
-              <img src={linkedinIcon} alt="LinkedIn" />
+            <span className={styles.dot}>&middot;</span>
+            <a
+              href="https://www.linkedin.com/in/liam-sbarro-8a2b19211/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialLink}
+            >
+              LinkedIn
             </a>
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <span>&copy; 2026 Liam Sbarro</span>
+      </footer>
     </section>
   );
 }
-
-
 
 export default Hero;

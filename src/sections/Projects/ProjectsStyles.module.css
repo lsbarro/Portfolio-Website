@@ -1,872 +1,395 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 1rem 4rem 1rem;
-    box-sizing: border-box;
-    min-height: 100vh;
-    position: relative;
+/* ======================================
+   80s COMPUTER UI — PROJECTS PAGE
+   ====================================== */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px 16px 0;
+  opacity: 0;
+}
+
+.visible {
+  animation: fadeInStep 0.5s steps(4) forwards;
+}
+
+@keyframes fadeInStep {
+  0% { opacity: 0; transform: translateY(8px); }
+  25% { opacity: 0.3; transform: translateY(6px); }
+  50% { opacity: 0.6; transform: translateY(4px); }
+  75% { opacity: 0.9; transform: translateY(2px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Shell Bar ---- */
+.shellBar {
+  max-width: 880px;
+}
+
+/* ---- Filter Bar ---- */
+.filterBar {
+  display: flex;
+  gap: 0;
+  width: 100%;
+  max-width: 880px;
+  border: 4px solid var(--border);
+  border-top: none;
+  background: var(--card-bg);
+  padding: 12px 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filterBtn {
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 8px 16px;
+  border: 2px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: transform 0.1s steps(2), box-shadow 0.1s steps(2), color 0.1s steps(2);
+  box-shadow: 3px 3px 0 var(--card-shadow);
+}
+
+.filterBtn:hover {
+  color: var(--text);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--card-shadow);
+}
+
+.filterActive {
+  color: var(--text);
+  background: var(--border);
+  color: var(--bg);
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+
+.filterActive:hover {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+/* ---- Content ---- */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 880px;
+}
+
+/* ---- Card ---- */
+.card {
+  border: 4px solid var(--border);
+  border-top: none;
+  background: var(--card-bg);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: background-color 0.4s steps(4);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.projectTitle {
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+
+.categoryTag {
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border: 2px dashed var(--border);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.projectDesc {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+/* ---- Detail List ---- */
+.detailList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detailItem {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text-muted);
+  padding-left: 16px;
+  position: relative;
+}
+
+.detailItem::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* ---- Tech Tags ---- */
+.techRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.techTag {
+  font-size: 10px;
+  padding: 6px 12px;
+  border: 2px solid var(--border);
+  color: var(--text);
+  letter-spacing: 0.5px;
+  box-shadow: 2px 2px 0 var(--card-shadow);
+}
+
+/* ---- Gallery ---- */
+.gallery {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.imageFrame {
+  width: 160px;
+  height: 120px;
+  border: 3px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--inset-shadow);
+  transition: box-shadow 0.2s steps(3), transform 0.1s steps(2);
+  background: var(--bg);
+}
+
+.imageFrame:hover {
+  box-shadow: var(--inset-shadow-hover);
+  transform: translate(2px, 2px);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---- Links ---- */
+.linkRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.linkBtn {
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 10px 18px;
+  border: 3px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--card-shadow);
+  transition: transform 0.1s steps(2), box-shadow 0.1s steps(2);
+}
+
+.linkBtn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--card-shadow);
+}
+
+.linkBtn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* ---- Footer ---- */
+.footer {
+  width: 100%;
+  max-width: 880px;
+  padding: 10px 16px;
+  border: 4px solid var(--border);
+  border-top: none;
+  background: var(--card-bg);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+}
+
+/* ---- Modal ---- */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.modalInner {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  border: 4px solid var(--border);
+  background: var(--bg);
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.closeBtn {
+  position: absolute;
+  top: -36px;
+  right: 0;
+  font-size: 12px;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 1px;
+  padding: 4px;
+}
+
+.closeBtn:hover {
+  text-decoration: underline;
+}
+
+.modalImage {
+  max-width: 100%;
+  max-height: 85vh;
+  display: block;
+  object-fit: contain;
+}
+
+/* ======================================
+   RESPONSIVE
+   ====================================== */
+
+@media (min-width: 768px) {
+  .card {
+    padding: 32px 32px;
   }
-  
-  /* Add a semi-transparent overlay to improve readability against background */
-  .container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    pointer-events: none;
-    z-index: -1;
-  }
-  
-  .header {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 3rem;
-    padding-top: 6rem;
-  }
-  
-  
-  .sectionTitle {
-    font-size: 3rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    position: relative;
-    color: var(--text-color);
-    text-align: center;
-    margin-top: 1rem;
-  }
-  
-  .sectionTitle::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: -12px;
-    width: 60px;
-    height: 3px;
-    background-color: var(--btn-color);
-    transform: translateX(-50%);
-  }
-  
-  .controlsContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    margin: 2rem auto 1.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-    background-color: rgba(20, 20, 20, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-  }
-  
-  .filterControls {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  
-  .categoryFilters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .filterButton {
-    padding: 0.6rem 1.25rem;
-    border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-    font-weight: 500;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .filterButton:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  }
-  
-  .activeFilter {
-    background-color: var(--btn-color);
-    color: var(--btn-text-color);
-    border-color: var(--btn-color);
-    box-shadow: 0 4px 8px rgba(9, 135, 242, 0.25);
-    font-weight: 600;
-  }
-  
-  .activeFilter:hover {
-    background-color: var(--btn-color);
-    box-shadow: 0 6px 12px rgba(9, 135, 242, 0.3);
-  }
-  
-  .viewControls {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .viewButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--text-color);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(4px);
-  }
-  
-  .viewButton:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-2px);
-  }
-  
-  .activeView {
-    background-color: var(--btn-color);
-    color: var(--btn-text-color);
-    border-color: var(--btn-color);
-    box-shadow: 0 4px 8px rgba(9, 135, 242, 0.25);
-  }
-  
-  .activeView:hover {
-    background-color: var(--btn-color);
-  }
-  
-  .projectsContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-    width: 100%;
-    max-width: 1200px;
-    margin: 1rem auto 0;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  
-  .projectsContainer.loaded {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .projectsContainer.list {
-    gap: 1.5rem;
-  }
-  
-  .techFilterContainer {
-    width: 100%;
-    max-width: 1200px;
-    margin: 4rem auto 0;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .techFilterTitle {
-    font-size: 1.25rem;
-    margin-bottom: 1.5rem;
-    color: var(--text-color);
-  }
-  
-  .techFilters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-  
-  .techFilterButton {
-    padding: 0.5rem 1rem;
-    border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-color);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.85rem;
-    font-weight: 400;
-  }
-  
-  .techFilterButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-  }
-  
-  .activeTechFilter {
-    background-color: rgba(9, 135, 242, 0.15);
-    border-color: rgba(9, 135, 242, 0.3);
-    box-shadow: 0 2px 6px rgba(9, 135, 242, 0.15);
-  }
-  
-  .noProjectsFound {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem 2rem;
-    text-align: center;
-    background-color: rgba(30, 30, 30, 0.2);
-    backdrop-filter: blur(8px);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    width: 100%;
-    max-width: 1200px;
-    margin: 2rem auto;
-  }
-  
-  .noProjectsFound p {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    color: var(--text-color);
-  }
-  
-  .resetFilterButton {
-    padding: 0.75rem 1.5rem;
-    background-color: var(--btn-color);
-    color: var(--btn-text-color);
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(9, 135, 242, 0.2);
-  }
-  
-  .resetFilterButton:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(9, 135, 242, 0.3);
-  }
-  
-  /* Individual Project Section */
-  .projectSection {
-    background-color: rgba(20, 20, 20, 0.75);
-    backdrop-filter: blur(15px);
-    border-radius: 16px;
-    padding: 2.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    transition: all 0.5s ease;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    overflow: hidden;
-    position: relative;
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  
-  .projectSection.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  :global([data-theme="dark"]) .projectSection {
-    background-color: rgba(15, 15, 15, 0.85);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  }
-  
-  .projectSection:not(.listView):hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* List view specific styles */
-  .projectSection.listView {
-    padding: 1.25rem 1.5rem;
-    border-radius: 12px;
-    margin-bottom: 0;
-    cursor: pointer;
-    background-color: rgba(20, 20, 20, 0.8);
-  }
-  
-  .projectSection.listView:hover {
-    background-color: rgba(20, 20, 20, 0.9);
-  }
-  
-  .projectSection.listView.expanded {
-    padding: 1.5rem 2rem 2.5rem;
-    background-color: rgba(20, 20, 20, 0.85);
-  }
-  
-  .projectHeader {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-bottom: 1.5rem;
-    cursor: pointer;
-  }
-  
-  .projectSection.listView .projectHeader {
-    margin-bottom: 0.5rem;
-  }
-  
-  .expandButton {
-    background: transparent;
-    border: none;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    left: -8px;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  
-  .expandIcon {
-    transition: transform 0.3s ease;
-  }
-  
-  .expandIcon.rotated {
-    transform: rotate(180deg);
-  }
-  
-  .categoryBadge {
-    background-color: rgba(9, 135, 242, 0.15);
-    color: var(--text-color);
-    font-size: 0.8rem;
-    padding: 0.3rem 0.75rem;
-    border-radius: 20px;
-    margin-left: 1rem;
-    margin-top: 0.5rem;
-    display: inline-block;
-    font-weight: 500;
-    border: 1px solid rgba(9, 135, 242, 0.2);
-  }
-  
-  .projectSection.listView .categoryBadge {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    margin: 0;
-  }
-  
-  .collapsedPreview {
-    padding: 0 0 0.5rem 1.25rem;
-    opacity: 0.8;
-  }
-  
-  .collapsedPreview p {
-    font-size: 0.95rem;
-    margin-bottom: 0.75rem;
-    color: var(--text-color);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .previewTags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .previewTag {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--text-color);
-  }
-  
+
   .projectTitle {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin-bottom: 0;
-    color: white;
-    position: relative;
-    display: inline-block;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    font-size: 18px;
   }
-  
-  .projectSection:not(.listView) .projectTitle {
-    margin-bottom: 1.5rem;
+
+  .projectDesc {
+    font-size: 14px;
   }
-  
-  .projectSection:not(.listView) .projectTitle::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -8px;
-    width: 40px;
-    height: 3px;
-    background-color: var(--btn-color);
+
+  .imageFrame {
+    width: 200px;
+    height: 150px;
   }
-  
-  .projectSection.listView .projectTitle {
-    font-size: 1.4rem;
-    margin-left: 1.25rem;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 1200px) {
+  .shellBar, .filterBar, .content, .footer {
+    max-width: 960px;
   }
-  
-  .projectContent {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    transition: all 0.3s ease;
+
+  .card {
+    padding: 36px 40px;
   }
-  
-  .projectContent.listContent {
-    padding-left: 1.25rem;
-    padding-top: 1rem;
-    animation: fadeIn 0.4s ease;
+
+  .projectTitle {
+    font-size: 20px;
   }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+
+  .projectDesc {
+    font-size: 15px;
   }
-  
-  .moreTags {
-    font-size: 0.75rem;
-    color: var(--text-color);
-    opacity: 0.7;
-  }
-  
-  .thumbnailCaption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 0.5rem;
-    font-size: 0.8rem;
-    color: white;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-  
-  .projectImageContainer:hover .thumbnailCaption {
-    opacity: 1;
-  }
-  
-  .projectInfo {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .projectDescription {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.95);
-    margin: 0;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-    font-weight: 400;
-  }
-  
-  .projectDetails {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    margin-top: 0.5rem;
-  }
-  
+
   .detailItem {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.9);
-    margin: 0;
-    position: relative;
-    padding-left: 1.25rem;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    font-size: 13px;
   }
-  
-  .detailItem::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: var(--btn-color);
-    font-size: 1.2rem;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+
+  .imageFrame {
+    width: 220px;
+    height: 165px;
   }
-  
-  .technologies {
-    margin-top: 1.5rem;
+
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 12px 10px 0;
   }
-  
-  .technologiesTitle {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+  .shellBar, .filterBar, .card, .footer {
+    border-width: 3px;
   }
-  
-  .technologiesList {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
+
+  .card {
+    padding: 20px 16px;
+    gap: 14px;
   }
-  
-  .technologyTag {
-    background-color: rgba(9, 135, 242, 0.15);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 30px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(9, 135, 242, 0.3);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+
+  .projectTitle {
+    font-size: 13px;
   }
-  
-  :global([data-theme="dark"]) .technologyTag {
-    background-color: rgba(9, 135, 242, 0.2);
-    border-color: rgba(9, 135, 242, 0.4);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+
+  .projectDesc {
+    font-size: 12px;
   }
-  
-  .technologyTag:hover {
-    background-color: rgba(9, 135, 242, 0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+
+  .detailItem {
+    font-size: 11px;
   }
-  
-  .projectLinks {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
+
+  .imageFrame {
+    width: 120px;
+    height: 90px;
+    border-width: 2px;
   }
-  
-  .projectLink {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.6rem 1.25rem;
-    background-color: var(--btn-color);
-    color: var(--btn-text-color);
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 8px rgba(9, 135, 242, 0.15);
+
+  .filterBtn {
+    font-size: 9px;
+    padding: 6px 10px;
   }
-  
-  .projectLink:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(9, 135, 242, 0.25);
+
+  .techTag {
+    font-size: 9px;
+    padding: 4px 8px;
   }
-  
-  .projectLink:active {
-    transform: translateY(-1px);
+
+  .linkBtn {
+    font-size: 10px;
+    padding: 8px 14px;
   }
-  
-  /* Project Gallery */
-  .projectGallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 0.5rem;
+
+  .categoryTag {
+    font-size: 8px;
   }
-  
-  .projectImageContainer {
-    aspect-ratio: 4/3;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  .footer {
+    font-size: 9px;
   }
-  
-  .projectImageContainer:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  }
-  
-  .projectImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-  
-  .projectImageContainer:hover .projectImage {
-    transform: scale(1.05);
-  }
-  
-  /* Modal styles */
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 1rem;
-    backdrop-filter: blur(5px);
-    animation: fadeIn 0.3s ease;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  .modalContent {
-    position: relative;
-    max-width: 90vw;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    animation: scaleIn 0.3s ease;
-  }
-  
-  @keyframes scaleIn {
-    from { transform: scale(0.95); }
-    to { transform: scale(1); }
-  }
-  
-  .closeButton {
-    position: absolute;
-    top: -40px;
-    right: -10px;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: white;
-    transition: all 0.2s ease;
-    z-index: 1001;
-  }
-  
-  .closeButton:hover {
-    background: var(--btn-color);
-    transform: scale(1.1);
-  }
-  
-  .enlargedImageContainer {
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
-    background-color: rgba(0, 0, 0, 0.5);
-    max-height: 85vh;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .enlargedImage {
-    max-width: 100%;
-    max-height: 75vh;
-    object-fit: contain;
-  }
-  
-  .imageCaption {
-    color: white;
-    margin: 1rem 0;
-    padding: 0 1rem;
-    font-size: 1rem;
-    text-align: center;
-    max-width: 100%;
-  }
-  
-  /* Responsive adjustments */
-  @media (min-width: 768px) {
-    .projectContent {
-      flex-direction: row;
-    }
-    
-    .projectInfo {
-      flex: 1;
-      padding-right: 2rem;
-    }
-    
-    .projectGallery {
-      flex: 1;
-      margin-top: 0;
-    }
-    
-    .projectTitle {
-      font-size: 2rem;
-    }
-    
-    .sectionTitle {
-      font-size: 2.5rem;
-    }
-  }
-  
-  @media (max-width: 767px) {
-    .projectSection {
-      padding: 1.5rem;
-    }
-    
-    .projectGallery {
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    }
-    
-    .backButton {
-      position: relative;
-      left: auto;
-      top: auto;
-      align-self: flex-start;
-      margin-bottom: 2rem;
-    }
-    
-    .header {
-      padding: 1.5rem;
-    }
-    
-    .sectionTitle {
-      font-size: 1.75rem;
-    }
-    
-    .projectTitle {
-      font-size: 1.5rem;
-    }
-    
-    .projectDescription {
-      font-size: 1rem;
-    }
-  }
-  @media (max-width: 768px) {
-    .projectSection {
-      background-color: rgba(15, 15, 15, 0.85);
-    }
-    
-    .projectSection.listView {
-      background-color: rgba(15, 15, 15, 0.85);
-    }
-    
-    .controlsContainer {
-      background-color: rgba(15, 15, 15, 0.8);
-      padding: 0.75rem 1rem;
-    }
-    
-    .container::before {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-  }
-  
-  /* Improved header section with background */
-  .header {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2rem;
-    position: relative;
-    padding-top: 2rem;
-    background-color: rgba(20, 20, 20, 0.6);
-    backdrop-filter: blur(8px);
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem;
-  }
-  
-  .sectionTitle {
-    font-size: 2.25rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    position: relative;
-    color: white;
-    text-align: center;
-    margin-top: 1rem;
-    font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  
-  .sectionTitle::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: -12px;
-    width: 60px;
-    height: 3px;
-    background-color: var(--btn-color);
-    transform: translateX(-50%);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Improve project links */
-  .projectLink {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.6rem 1.25rem;
-    background-color: var(--btn-color);
-    color: var(--btn-text-color);
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(9, 135, 242, 0.25);
-  }
-  
-  .projectLink:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(9, 135, 242, 0.35);
-  }
-  
-  .projectLink:active {
-    transform: translateY(-1px);
-  }
-  
-  @media (min-width: 1200px) {
-    .projectSection {
-      padding: 3rem;
-    }
-    
-    .projectTitle {
-      font-size: 2.25rem;
-    }
-    
-    .projectDescription {
-      font-size: 1.2rem;
-    }
-    
-    .sectionTitle {
-      font-size: 3rem;
-    }
-    
-    .projectGallery {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-  }
+}

@@ -1,144 +1,215 @@
+/* ======================================
+   80s COMPUTER UI — DIRECTORY
+   ====================================== */
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-width: 780px;
   margin: 0 auto;
-  padding: 4rem 1rem;
-  box-sizing: border-box;
+  padding: 0 16px 4rem;
 }
 
 .sectionTitle {
-  font-size: 2rem;
+  font-size: 15px;
+  letter-spacing: 3px;
+  color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 3rem;
-  position: relative;
-  color: var(--portfolio-color);
+  margin-bottom: 28px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--border);
+  width: 100%;
   text-align: center;
+}
+
+/* ---- Grid ---- */
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   width: 100%;
 }
 
-.sectionTitle::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -12px;
-  width: 60px;
-  height: 3px;
-  background-color: var(--btn-color);
-  transform: translateX(-50%);
+/* ---- Card ---- */
+.card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+  border: 3px solid var(--border);
+  background: var(--card-bg);
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 6px 6px 0 var(--card-shadow);
+  transition: transform 0.1s steps(2), box-shadow 0.1s steps(2);
 }
 
-.portfolioContainer {
-  display: grid;
-  grid-template-columns: minmax(280px, 1fr);
-  gap: 2rem;
+.card:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 var(--card-shadow);
+}
+
+.card:active {
+  transform: translate(6px, 6px);
+  box-shadow: none;
+}
+
+/* ---- Card Image ---- */
+.cardImageWrap {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border: 3px solid var(--border);
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: var(--inset-shadow);
+}
+
+.cardImage {
   width: 100%;
-  max-width: 1400px;
-  justify-content: center;
-  align-items: stretch;
-  margin: 0 auto;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(0.4) contrast(1.1);
+  transition: filter 0.3s steps(4);
 }
 
-/* Ensure consistent spacing and alignment on very small screens */
-@media (max-width: 320px) {
-  .portfolioContainer {
-    grid-template-columns: minmax(240px, 1fr);
-    width: 100%;
-    max-width: 280px;
-  }
-  
-  .container {
-    padding: 3rem 0.5rem;
-  }
+.card:hover .cardImage {
+  filter: grayscale(0) contrast(1);
 }
 
-/* Small tablets */
-@media (min-width: 600px) {
-  .portfolioContainer {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    width: 100%;
-    max-width: 600px;
-  }
-  
-  .sectionTitle {
-    font-size: 2.25rem;
-    margin-bottom: 3.5rem;
-  }
-  
-  .container {
-    padding: 5rem 1.5rem;
-  }
+/* ---- Card Body ---- */
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
 }
 
-/* Medium tablets */
+.cardTitle {
+  color: var(--text);
+  letter-spacing: 1px;
+}
+
+.cardDesc {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* ---- Arrow ---- */
+.cardArrow {
+  font-size: 16px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.15s steps(3), color 0.15s steps(3);
+}
+
+.card:hover .cardArrow {
+  transform: translateX(4px);
+  color: var(--text);
+}
+
+/* ======================================
+   RESPONSIVE
+   ====================================== */
+
 @media (min-width: 768px) {
-  .portfolioContainer {
-    max-width: 720px;
-    gap: 2.25rem;
-  }
-}
-
-/* Larger tablets */
-@media (min-width: 900px) {
-  .portfolioContainer {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
-    max-width: 820px;
-  }
-  
-  .sectionTitle {
-    font-size: 2.5rem;
-    margin-bottom: 4rem;
-  }
-  
   .container {
-    padding: 6rem 2rem;
+    max-width: 780px;
+    padding: 0 16px 5rem;
+  }
+
+  .grid {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .card {
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .cardImageWrap {
+    width: 72px;
+    height: 72px;
+  }
+
+  .cardArrow {
+    align-self: flex-end;
+  }
+
+  .sectionTitle {
+    font-size: 16px;
+    margin-bottom: 36px;
   }
 }
 
-/* Small desktops */
-@media (min-width: 1100px) {
-  .portfolioContainer {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
-    max-width: 1020px;
-  }
-}
-
-/* Standard desktops */
 @media (min-width: 1200px) {
-  .portfolioContainer {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3rem;
-    max-width: 1140px;
-  }
-  
-  .sectionTitle {
-    font-size: 2.75rem;
-  }
-  
   .container {
-    padding: 7rem 2.5rem;
+    max-width: 880px;
+  }
+
+  .card {
+    padding: 28px;
+  }
+
+  .cardImageWrap {
+    width: 88px;
+    height: 88px;
+  }
+
+  .cardTitle {
+    font-size: 16px;
+  }
+
+  .cardDesc {
+    font-size: 14px;
+  }
+
+  .sectionTitle {
+    font-size: 18px;
+  }
+
+  .cardArrow {
+    font-size: 20px;
   }
 }
 
-/* Large desktops */
-@media (min-width: 1600px) {
-  .portfolioContainer {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4rem;
-    max-width: 1320px;
-  }
-  
-  .sectionTitle {
-    font-size: 3rem;
-    margin-bottom: 5rem;
-  }
-  
+@media (max-width: 480px) {
   .container {
-    padding: 8rem 3rem;
+    padding: 0 12px 3rem;
+  }
+
+  .card {
+    padding: 12px;
+    gap: 12px;
+    border-width: 3px;
+    box-shadow: 4px 4px 0 var(--card-shadow);
+  }
+
+  .cardImageWrap {
+    width: 44px;
+    height: 44px;
+    border-width: 2px;
+  }
+
+  .cardTitle {
+    font-size: 9px;
+  }
+
+  .cardDesc {
+    font-size: 7px;
+  }
+
+  .sectionTitle {
+    font-size: 10px;
+    letter-spacing: 2px;
   }
 }
